@@ -1,6 +1,8 @@
 import request from 'supertest';
 import app from '../app';
 import { CustomResponse } from '../types/api';
+import db from '../../db/postgres/connection'
+
 
 afterAll(() => {
   db.end();
