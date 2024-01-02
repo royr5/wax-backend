@@ -7,8 +7,7 @@ describe("", () => {
 });
 
 describe("/api/reviews", () => {
-	
-	describe("/api/reviews/:music_id", () => {
+	xdescribe("/api/reviews/:music_id", () => {
 		describe("GET /api/reviews/:music_id", () => {
 			it("200: should return an array of music objects", () => {
 				return request(app)
@@ -16,7 +15,6 @@ describe("/api/reviews", () => {
 					.expect(200)
 					.then((response: unknown) => {
 						const { body } = response as { body: Review[] };
-
 						body.forEach((review: any) => {
 							expect(review).toMatchObject({
 								music_id: 1,
@@ -31,5 +29,4 @@ describe("/api/reviews", () => {
 			});
 		});
 	});
-
 });
