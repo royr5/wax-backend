@@ -27,7 +27,7 @@
   "version": "1.0.0",
   "main": "jest.config.js",
   "scripts": {
-    "test": "jest src/ --watch",
+    "test": "jest src/",
     "prepare": "husky install",
     "start": "nodemon dist/listen.js"
   },
