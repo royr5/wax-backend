@@ -3,9 +3,9 @@ export interface CustomResponse {
 }
 
 export interface Music {
-    id: number
+    music_id: number
     spotify_id: number
-    artist: string
+    artists: string[]
     artist_id: number
     name: string
     type: string
@@ -14,4 +14,5 @@ export interface Music {
     preview: string
     listen_link: string
     release_date: string
+    artwork: string
 }
