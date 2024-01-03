@@ -32,6 +32,7 @@ export const selectAllMusic = (queries?: MusicQueries) => {
   )
 
   return db.query(formattedMusicQuery).then(({ rows }: { rows: Music[] }) => {
+    if(!rows.length){return Promise.reject({status: 404})}
     return rows
   })
 }
