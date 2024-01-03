@@ -8,9 +8,9 @@ afterAll(() => {
 })
 
 //import music data into seed function
-beforeEach(() => {
-  return seed()
-})
+// beforeEach(() => {
+//   return seed()
+// })
 
 describe('GET /api/music', () => {
   test('200: should return an array of object with all music', () => {
