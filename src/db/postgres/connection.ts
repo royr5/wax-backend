@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 
 const ENV = process.env.NODE_ENV || "dev";
 
-dotenv.config({ path: `${__dirname}/../../.env.${ENV}` });
+dotenv.config({ path: `${__dirname}/../../../.env.${ENV}` });
 
 const config = {} as PoolConfig ;
 
