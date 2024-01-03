@@ -1,14 +1,18 @@
-const { Pool } = require("pg");
-const ENV = process.env.NODE_ENV || "development";
+import { Pool, PoolConfig } from "pg";
+import * as dotenv from "dotenv";
 
-require("dotenv").config({
-  path: `${__dirname}/../.env.${ENV}`,
-});
+const ENV = process.env.NODE_ENV || "dev";
 
-if (!process.env.PGDATABASE && !process.env.DATABASE_URL) {
-  throw new Error("PGDATABASE or DATABASE_URL not set");
+dotenv.config({ path: `${__dirname}/../../../.env.${ENV}` });
+
+const config = {} as PoolConfig ;
+
+if (ENV === "prod") {
+	config.ssl = { rejectUnauthorized: false };
 }
 
-const config = {};
+if (!process.env.PGDATABASE && !process.env.DATABASE_URL) {
+	throw new Error("PGDATABASE or DATABASE_URL not set");
+}
 
-module.exports = new Pool(config);
+export default new Pool(config);

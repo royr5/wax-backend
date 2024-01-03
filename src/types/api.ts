@@ -9,8 +9,8 @@ export interface Music {
     artist_id: number
     name: string
     type: string
-    track_list: string[]
-    genre: string
+    tracks: string[]
+    genre: string[]
     preview: string
     listen_link: string
     release_date: string
