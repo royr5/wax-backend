@@ -5,7 +5,7 @@ const ENV = process.env.NODE_ENV || "dev";
 
 dotenv.config({ path: `${__dirname}/../../../.env.${ENV}` });
 
-const config = {} as PoolConfig ;
+const config = {} as PoolConfig;
 
 if (ENV === "prod") {
 	config.ssl = { rejectUnauthorized: false };
