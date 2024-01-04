@@ -8,11 +8,11 @@ const seed_1 = require("./seed");
 const connection_1 = __importDefault(require("../connection"));
 const runSeed = async () => {
     try {
-        await (0, seed_1.seed)(test_data_json_1.users, test_data_json_1.music);
+        await (0, seed_1.seed)(test_data_json_1.users, test_data_json_1.music, test_data_json_1.reviews);
         connection_1.default.end;
     }
     catch (e) {
-        throw new Error();
+        console.log(e);
     }
 };
 runSeed();
