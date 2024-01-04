@@ -27,10 +27,17 @@ describe("postgres", () => {
 				album_id: expect.any(String),
 				release_date: expect.any(Date),
 			});
-			expect(String(row.genres)).toMatch(/\[.*\]|null/i);
-			expect(String(row.tracks)).toMatch(/\[.*\]|null/i);
-			expect(String(row.album_img)).toMatch(/\w|null/i);
-			expect(String(row.preview)).toMatch(/\w|null/i);
+			row.genres !== null &&
+				row.genres.forEach((genre: string[]) => {
+					expect(typeof genre).toBe("string");
+				});
+			row.tracks !== null &&
+				row.tracks.forEach((track: string[]) => {
+					expect(typeof track).toBe("string");
+				});
+			row.album_img !== null &&
+				expect(typeof row.album_img).toBe("string");
+			row.preview !== null && expect(typeof row.preview).toBe("string");
 		});
 	});
 });

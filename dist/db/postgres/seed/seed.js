@@ -57,7 +57,7 @@ const seed = async (users, music, reviews) => {
         item.type,
         item.tracks,
         item.album_id,
-        `{${item.genres.map((genre) => `${genre}`)}}`,
+        `{${item.genres}}`,
         item.preview,
         item.album_images.url,
         item.release_date,
