@@ -2,7 +2,7 @@ import { users, music } from './../data/test-data.json'
 import { seed } from './seed'
 import db from '../connection'
 
-export default async () => {
+const runSeed = async () => {
   try {
     await seed(users as [], music as [])
 
@@ -11,3 +11,7 @@ export default async () => {
     throw new Error()
   }
 }
+
+
+runSeed()
+export default runSeed
