@@ -8,3 +8,4 @@ const { PORT = 3000 } = process.env;
 app_1.default.listen(PORT, () => {
     console.log(`listening on port ${PORT}...`);
 });
+app_1.default.listen(PORT, () => console.log(`Listening on ${PORT}...`));
