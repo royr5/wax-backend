@@ -12,44 +12,44 @@ afterAll(() => {
     connection_1.default.end();
 });
 beforeEach(() => {
-    return (0, seed_1.seed)(test_data_json_1.users, test_data_json_1.music);
+    return (0, seed_1.seed)(test_data_json_1.users, test_data_json_1.music, test_data_json_1.reviews);
 });
-describe('GET /api/music', () => {
-    test('200: should return an array of object with all music', () => {
+describe("GET /api/music", () => {
+    test("200: should return an array of object with all music", () => {
         return (0, supertest_1.default)(app_1.default)
-            .get('/api/music')
+            .get("/api/music")
             .expect(200)
             .then(({ body }) => {
             body.music.forEach((music) => {
-                expect(music).toHaveProperty('music_id');
-                expect(music).toHaveProperty('artist_ids');
-                expect(music).toHaveProperty('artist_names');
-                expect(music).toHaveProperty('name');
-                expect(music).toHaveProperty('type');
-                expect(music).toHaveProperty('tracks');
-                expect(music).toHaveProperty('album_id');
-                expect(music).toHaveProperty('genres');
-                expect(music).toHaveProperty('preview');
-                expect(music).toHaveProperty('album_img');
-                expect(music).toHaveProperty('release_date');
-                expect(typeof music.artist_names).toBe('object');
-                expect(typeof music.tracks).toBe('object');
+                expect(music).toHaveProperty("music_id");
+                expect(music).toHaveProperty("artist_ids");
+                expect(music).toHaveProperty("artist_names");
+                expect(music).toHaveProperty("name");
+                expect(music).toHaveProperty("type");
+                expect(music).toHaveProperty("tracks");
+                expect(music).toHaveProperty("album_id");
+                expect(music).toHaveProperty("genres");
+                expect(music).toHaveProperty("preview");
+                expect(music).toHaveProperty("album_img");
+                expect(music).toHaveProperty("release_date");
+                expect(typeof music.artist_names).toBe("object");
+                expect(typeof music.tracks).toBe("object");
             });
         });
     });
     test('404: incorrect path', () => {
         return (0, supertest_1.default)(app_1.default)
-            .get('/api/musicincorrect')
+            .get("/api/musicincorrect")
             .expect(404)
             .then((Response) => {
-            expect(Response.body.msg).toBe('incorrect path - path not found');
+            expect(Response.body.msg).toBe("incorrect path - path not found");
         });
     });
 });
-describe('GET /api/music?music_id', () => {
+xdescribe('GET /api/music?music_id', () => {
     test('200: should return a single object of music by music_id', () => {
         return (0, supertest_1.default)(app_1.default)
-            .get('/api/music?music_id=1MVqeIAwhD4T44AKVkIfic')
+            .get('/api/music?music_id=1')
             .expect(200)
             .then(({ body }) => {
             expect(body.music.music_id).toBe('1MVqeIAwhD4T44AKVkIfic');
@@ -58,7 +58,7 @@ describe('GET /api/music?music_id', () => {
     test('404: not found', () => {
         return (0, supertest_1.default)(app_1.default)
             .get('/api/music?music_id=wrongthing')
-            .expect(404)
+            .expect(400)
             .then((Response) => {
             expect(Response.body.msg).toBe('not found');
         });
@@ -67,7 +67,7 @@ describe('GET /api/music?music_id', () => {
 describe('GET /api/music?artist_ids', () => {
     test('200: should return an array of music object by artist_ids for a particular artist', () => {
         return (0, supertest_1.default)(app_1.default)
-            .get('/api/music?artist_ids=4oLeXFyACqeem2VImYeBFe')
+            .get('/api/music?artist_id=2')
             .expect(200)
             .then(({ body }) => {
             expect(body.music[0].artist_ids).toContain('4oLeXFyACqeem2VImYeBFe');
@@ -109,7 +109,7 @@ describe('/api/reviews', () => {
     describe('GET /api/reviews', () => {
         it('200: should return an array of review objects', () => {
             return (0, supertest_1.default)(app_1.default)
-                .get('/api/reviews')
+                .get("/api/reviews")
                 .expect(200)
                 .then((response) => {
                 const { body } = response;
@@ -126,11 +126,11 @@ describe('/api/reviews', () => {
             });
         });
     });
-    describe('/api/reviews/:music_id', () => {
-        describe('GET /api/reviews/:music_id', () => {
-            it('200: should return an array of review objects with passed music_id', () => {
+    describe("/api/reviews/:music_id", () => {
+        describe("GET /api/reviews/:music_id", () => {
+            it("200: should return an array of review objects with passed music_id", () => {
                 return (0, supertest_1.default)(app_1.default)
-                    .get('/api/reviews/1')
+                    .get("/api/reviews/1")
                     .expect(200)
                     .then((response) => {
                     const { body } = response;

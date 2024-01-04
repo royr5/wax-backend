@@ -22,8 +22,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = __importStar(require("fs/promises"));
+const test_data_json_1 = __importDefault(require("../db/postgres/data/test-data.json"));
+const faker_1 = require("@faker-js/faker");
 const formatMusicResponse = async () => {
     const unformatted = await fs.readFile(`${__dirname}/db/postgres/test-data/music.json`, "utf-8");
     const formatted = JSON.parse(unformatted);
@@ -42,4 +47,19 @@ const formatMusicResponse = async () => {
     });
     await fs.writeFile(`${__dirname}/db/postgres/test-data/formatted-music.json`, JSON.stringify(output));
 };
-formatMusicResponse();
+// formatMusicResponse();
+const addGenres = async () => {
+    const formatted = test_data_json_1.default.music.map((song) => {
+        return {
+            ...song,
+            genres: [faker_1.faker.music.genre()],
+        };
+    });
+    const output = {
+        users: test_data_json_1.default.users,
+        reviews: test_data_json_1.default.reviews,
+        music: formatted,
+    };
+    await fs.writeFile(`${__dirname}/../db/postgres/data/test-data.json`, JSON.stringify(output));
+};
+// addGenres();
