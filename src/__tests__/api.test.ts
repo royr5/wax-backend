@@ -2,7 +2,7 @@ import request from 'supertest';
 import app from '../app';
 import { Music, Review } from '../types/api';
 import db from '.././db/postgres/connection';
-import { users, music } from '../db/postgres/data/test-data.json';
+import { users, music, reviews } from '../db/postgres/data/test-data.json';
 import { seed } from '../db/postgres/seed/seed';
 
 afterAll(() => {
@@ -10,7 +10,7 @@ afterAll(() => {
 });
 
 beforeEach(() => {
-  return seed(users as [], music as []);
+  return seed(users as [], music as [], reviews as []) ;
 });
 
 describe('GET /api/music', () => {
