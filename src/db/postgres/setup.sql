@@ -1,0 +1,6 @@
+DROP DATABASE IF EXISTS gatefold_API_test;
+DROP DATABASE IF EXISTS gatefold_API;
+
+CREATE DATABASE gatefold_API_test;
+CREATE DATABASE gatefold_API;
+
