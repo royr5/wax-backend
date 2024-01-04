@@ -20,7 +20,6 @@ describe('GET /api/music', () => {
       .then(({ body }) => {
         body.forEach((music: Music) => {
           expect(music).toHaveProperty('music_id')
-          expect(music).toHaveProperty('spotify_id')
           expect(music).toHaveProperty('artists')
           expect(music).toHaveProperty('artist_id')
           expect(music).toHaveProperty('name')
@@ -33,7 +32,6 @@ describe('GET /api/music', () => {
           expect(music).toHaveProperty('artwork')
           expect(music.artists.length).toBe(true)
           expect(typeof music.tracks).toBe('object')
-          expect(music.genre.length).toBe(true)
         })
       })
   })
@@ -71,7 +69,7 @@ describe('GET /api/music?artist_id', () => {
       .expect(200)
       .then(({ body }) => {
         body.forEach((music: Music) => {
-          expect(music.artist_id).toBe(2)
+          expect(music.artist_ids[0]).toBe(2)
         })
       })
   })

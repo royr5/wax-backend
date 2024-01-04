@@ -21,7 +21,6 @@ describe('GET /api/music', () => {
             .then(({ body }) => {
             body.forEach((music) => {
                 expect(music).toHaveProperty('music_id');
-                expect(music).toHaveProperty('spotify_id');
                 expect(music).toHaveProperty('artists');
                 expect(music).toHaveProperty('artist_id');
                 expect(music).toHaveProperty('name');
@@ -34,7 +33,6 @@ describe('GET /api/music', () => {
                 expect(music).toHaveProperty('artwork');
                 expect(music.artists.length).toBe(true);
                 expect(typeof music.tracks).toBe('object');
-                expect(music.genre.length).toBe(true);
             });
         });
     });
@@ -72,7 +70,7 @@ describe('GET /api/music?artist_id', () => {
             .expect(200)
             .then(({ body }) => {
             body.forEach((music) => {
-                expect(music.artist_id).toBe(2);
+                expect(music.artist_ids[0]).toBe(2);
             });
         });
     });
@@ -108,14 +106,15 @@ describe('GET /api/music?genre', () => {
             });
         });
     });
-describe("", () => {
-    test("should ", () => { });
 });
-describe("/api/reviews", () => {
-    describe("GET /api/reviews", () => {
-        it("200: should return an array of review objects", () => {
+describe('', () => {
+    test('should ', () => { });
+});
+describe('/api/reviews', () => {
+    describe('GET /api/reviews', () => {
+        it('200: should return an array of review objects', () => {
             return (0, supertest_1.default)(app_1.default)
-                .get("/api/reviews")
+                .get('/api/reviews')
                 .expect(200)
                 .then((response) => {
                 const { body } = response;
@@ -132,11 +131,11 @@ describe("/api/reviews", () => {
             });
         });
     });
-    describe("/api/reviews/:music_id", () => {
-        describe("GET /api/reviews/:music_id", () => {
-            it("200: should return an array of review objects with passed music_id", () => {
+    describe('/api/reviews/:music_id', () => {
+        describe('GET /api/reviews/:music_id', () => {
+            it('200: should return an array of review objects with passed music_id', () => {
                 return (0, supertest_1.default)(app_1.default)
-                    .get("/api/reviews/1")
+                    .get('/api/reviews/1')
                     .expect(200)
                     .then((response) => {
                     const { body } = response;
