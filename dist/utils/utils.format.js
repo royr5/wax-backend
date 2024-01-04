@@ -24,7 +24,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = __importStar(require("fs/promises"));
-const doThis = async () => {
+const formatMusicResponse = async () => {
     const unformatted = await fs.readFile(`${__dirname}/db/postgres/test-data/music.json`, "utf-8");
     const formatted = JSON.parse(unformatted);
     const output = formatted.tracks.items.map((song) => {
@@ -42,4 +42,4 @@ const doThis = async () => {
     });
     await fs.writeFile(`${__dirname}/db/postgres/test-data/formatted-music.json`, JSON.stringify(output));
 };
-doThis();
+formatMusicResponse();
