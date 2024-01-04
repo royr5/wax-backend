@@ -32,7 +32,18 @@ describe('GET /api/music', () => {
                 expect(music).toHaveProperty('listen_link');
                 expect(music).toHaveProperty('release_date');
                 expect(music).toHaveProperty('artwork');
+                expect(music.artists.length).toBe(true);
+                expect(typeof music.tracks).toBe('object');
+                expect(music.genre.length).toBe(true);
             });
+        });
+    });
+    test('404: incorrect path', () => {
+        return (0, supertest_1.default)(app_1.default)
+            .get('/api/musicincorrect')
+            .expect(404)
+            .then((Response) => {
+            expect(Response.body.msg).toBe('incorrect path - path not found');
         });
     });
 });
@@ -43,6 +54,14 @@ describe('GET /api/music?music_id', () => {
             .expect(200)
             .then(({ body }) => {
             expect(body.music_id).toBe(1);
+        });
+    });
+    test('400: bad request on no number', () => {
+        return (0, supertest_1.default)(app_1.default)
+            .get('/api/music?music_id=wrongthing')
+            .expect(400)
+            .then((Response) => {
+            expect(Response.body.msg).toBe('bad request');
         });
     });
 });

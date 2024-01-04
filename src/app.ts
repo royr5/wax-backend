@@ -6,10 +6,10 @@ const app = express()
 
 app.use(express.json())
 app.use('/api', apiRouter)
-apiRouter.use('/api/music', musicRouter)
+app.use('/api/music', musicRouter)
 
-app.all('*', (req: Request, res: Response) => {
-  res.status(404).send({ msg: 'incorrect path - path not found' })
-})
+// app.all('*', (req: Request, res: Response) => {
+//   res.status(404).send({ msg: 'incorrect path - path not found' })
+// })
 
 export default app

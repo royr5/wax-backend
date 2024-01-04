@@ -24,7 +24,8 @@
   "main": "jest.config.js",
   "scripts": {
     "test": "jest dist/__tests__",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "start-dev": "nodemon node ./dist/listen.js"
   },
   "keywords": [],
   "author": "",
