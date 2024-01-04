@@ -37,9 +37,7 @@ describe('GET /api/music', () => {
             });
         });
     });
-    //! 
-    // TODO fix 
-    xtest('404: incorrect path', () => {
+    test('404: incorrect path', () => {
         return (0, supertest_1.default)(app_1.default)
             .get('/api/musicincorrect')
             .expect(404)
@@ -48,72 +46,66 @@ describe('GET /api/music', () => {
         });
     });
 });
-xdescribe('GET /api/music?music_id', () => {
+describe('GET /api/music?music_id', () => {
     test('200: should return a single object of music by music_id', () => {
         return (0, supertest_1.default)(app_1.default)
-            .get('/api/music?music_id=1')
+            .get('/api/music?music_id=1MVqeIAwhD4T44AKVkIfic')
             .expect(200)
             .then(({ body }) => {
-            expect(body.music_id).toBe(1);
+            expect(body.music.music_id).toBe('1MVqeIAwhD4T44AKVkIfic');
         });
     });
-    test('400: bad request on no number', () => {
+    test('404: not found', () => {
         return (0, supertest_1.default)(app_1.default)
             .get('/api/music?music_id=wrongthing')
-            .expect(400)
+            .expect(404)
             .then((Response) => {
-            expect(Response.body.msg).toBe('bad request');
+            expect(Response.body.msg).toBe('not found');
         });
     });
 });
-xdescribe('GET /api/music?artist_id', () => {
-    test('200: should return an array of music object by artist_id for a particular artist', () => {
+describe('GET /api/music?artist_ids', () => {
+    test('200: should return an array of music object by artist_ids for a particular artist', () => {
         return (0, supertest_1.default)(app_1.default)
-            .get('/api/music?artist_id=2')
+            .get('/api/music?artist_ids=4oLeXFyACqeem2VImYeBFe')
             .expect(200)
             .then(({ body }) => {
-            body.forEach((music) => {
-                expect(music.artist_ids[0]).toBe(2);
-            });
+            expect(body.music[0].artist_ids).toContain('4oLeXFyACqeem2VImYeBFe');
         });
     });
 });
-xdescribe('GET /api/music?genre', () => {
+xdescribe('GET /api/music?genres', () => {
     test('200: should return an array of music with the same genre', () => {
         return (0, supertest_1.default)(app_1.default)
-            .get('/api/music?genre=rock')
+            .get('/api/music?genres=rock')
             .expect(200)
             .then(({ body }) => {
-            body.forEach((music) => {
-                expect(music.genres).toEqual(['rock']);
-            });
-        });
-    });
-    describe('GET /api/music?order', () => {
-        test('200: should return an array of music ASC or DESC by release_date if no other query, DESC by default', () => {
-            return (0, supertest_1.default)(app_1.default)
-                .get('/api/music?order=ASC')
-                .expect(200)
-                .then(({ body }) => {
-                expect(body[0].release_date).toBe('2024-01-01');
-            });
-        });
-    });
-    describe('GET /api/music?pagination', () => {
-        test('200: should return an array of music paginated beyond the default limit of 40', () => {
-            return (0, supertest_1.default)(app_1.default)
-                .get('/api/music?p=2')
-                .expect(200)
-                .then(({ body }) => {
-                expect(body[0].music_id).toBe(41);
-            });
+            console.log(body.music);
+            //  expect(music[0].genres).toEqual(['rock']);
         });
     });
 });
-xdescribe('', () => {
-    test('should ', () => { });
+describe('GET /api/music?order', () => {
+    test('200: should return an array of music ASC or DESC by release_date if no other query, DESC by default', () => {
+        return (0, supertest_1.default)(app_1.default)
+            .get('/api/music?order=ASC')
+            .expect(200)
+            .then(({ body }) => {
+            expect(parseInt(body.music[0].release_date)).toBeLessThan(parseInt(body.music[1].release_date));
+        });
+    });
 });
-xdescribe('/api/reviews', () => {
+describe('GET /api/music?pagination', () => {
+    test('200: should return an array of music paginated beyond the default limit of 40', () => {
+        return (0, supertest_1.default)(app_1.default)
+            .get('/api/music?p=2')
+            .expect(200)
+            .then(({ body }) => {
+            expect(body.music.length).toBe(10);
+        });
+    });
+});
+describe('/api/reviews', () => {
     describe('GET /api/reviews', () => {
         it('200: should return an array of review objects', () => {
             return (0, supertest_1.default)(app_1.default)

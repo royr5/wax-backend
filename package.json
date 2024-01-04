@@ -30,6 +30,7 @@
   "main": "jest.config.js",
   "scripts": {
     "test": "jest dist/__tests__",
+    "test-watch": "jest dist/__tests__ --watch",
     "prepare": "husky install",
     "start-dev": "nodemon node ./dist/listen.js",
     "seed-dev": "node dist/db/postgres/seed/run-seed.js"

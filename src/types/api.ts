@@ -13,8 +13,8 @@ export interface Music {
 }
 export interface MusicQueries {
   music_id?: string
-  artist_id?: string
-  genre?: string
+  artist_ids?: string
+  genres?: string
   order?: 'ASC' | 'DESC'
   p?: string
 }

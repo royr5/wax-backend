@@ -3,7 +3,7 @@ import apiRouter from "./api/routes/api.router";
 import reviewRouter from "./api/routes/review.router";
 import loginRouter from "./api/routes/login.router";
 import musicRouter from './api/routes/music.router'
-
+import {handle404} from './errors'
 
 const app = express()
 
@@ -16,8 +16,6 @@ app.use("/api/reviews", reviewRouter);
 
 app.use("/api/login", loginRouter);
 
-// app.all('*', (req: Request, res: Response) => {
-//   res.status(404).send({ msg: 'incorrect path - path not found' })
-// })
+app.all('*', handle404)
 
 export default app
