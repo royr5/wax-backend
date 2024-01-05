@@ -135,7 +135,7 @@ describe('/api/reviews', () => {
                     const { body } = response;
                     body.reviews.forEach((review) => {
                         expect(review).toMatchObject({
-                            music_id: 1,
+                            music_id: "5cj0lLjcoR7YOSnhnX0Po5",
                             user_id: expect.any(Number),
                             score: expect.any(Number),
                             title: expect.any(String || null),

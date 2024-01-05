@@ -37,9 +37,21 @@ describe("postgres", () => {
                 row.tracks.forEach((track) => {
                     expect(typeof track).toBe("string");
                 });
-            row.album_img !== null &&
-                expect(typeof row.album_img).toBe("string");
+            row.album_img !== null && expect(typeof row.album_img).toBe("string");
             row.preview !== null && expect(typeof row.preview).toBe("string");
+        });
+    });
+    it("should contain all reviews", async () => {
+        const { rows } = await connection_1.default.query(`SELECT * FROM reviews;`);
+        rows.forEach((row) => {
+            expect(row).toMatchObject({
+                review_id: expect.any(Number),
+                screen_name: expect.any(String),
+                music_id: expect.any(String),
+                rating: expect.any(Number),
+                review_title: expect.any(String),
+                review_body: expect.any(String),
+            });
         });
     });
 });
