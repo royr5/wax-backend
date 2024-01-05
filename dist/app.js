@@ -17,5 +17,8 @@ app.use("/api", api_router_1.default);
 app.use("/api/music", music_router_1.default);
 app.use("/api/reviews", review_router_1.default);
 app.use("/api/login", login_router_1.default);
+app.use(errors_1.handleCustomError);
+app.use(errors_1.handlePsql23502);
+app.use(errors_1.handlePsql23503);
 app.all('*', errors_1.handle404);
 exports.default = app;
