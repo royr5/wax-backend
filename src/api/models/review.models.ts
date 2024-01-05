@@ -14,6 +14,5 @@ export const selectReviews = async (id?: string): Promise<Review[]> => {
   );
 
   const { rows } = await db.query(formattedQuery);
-
   return rows as Review[];
 };
