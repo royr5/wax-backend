@@ -114,14 +114,14 @@ describe('/api/reviews', () => {
         .expect(200)
         .then((response: unknown) => {
           const { body } = response as { body: { reviews: Review[] } }
-
           body.reviews.forEach((review: any) => {
             expect(review).toMatchObject({
-              music_id: expect.any(Number),
-              user_id: expect.any(Number),
-              score: expect.any(Number),
-              title: expect.any(String || null),
-              body: expect.any(String || null),
+              review_id: expect.any(Number),
+              music_id: expect.any(String),
+              screen_name: expect.any(String),
+              rating: expect.any(Number),
+              review_title: expect.any(String || null),
+              review_body: expect.any(String || null),
               created_at: expect.any(String),
             })
           })
@@ -132,19 +132,18 @@ describe('/api/reviews', () => {
     describe('GET /api/reviews/:music_id', () => {
       it('200: should return an array of review objects with passed music_id', () => {
         return request(app)
-          .get('/api/reviews/1')
+          .get('/api/reviews/2IGMVunIBsBLtEQyoI1Mu7')
           .expect(200)
           .then((response: unknown) => {
             const { body } = response as { body: { reviews: Review[] } }
-
             body.reviews.forEach((review: any) => {
               expect(review).toMatchObject({
-
-                music_id: "5cj0lLjcoR7YOSnhnX0Po5",
-                user_id: expect.any(Number),
-                score: expect.any(Number),
-                title: expect.any(String || null),
-                body: expect.any(String || null),
+                review_id: expect.any(Number),
+                music_id: "2IGMVunIBsBLtEQyoI1Mu7",
+                screen_name: expect.any(String),
+                rating: expect.any(Number),
+                review_title: expect.any(String || null),
+                review_body: expect.any(String || null),
                 created_at: expect.any(String),
               })
             })
