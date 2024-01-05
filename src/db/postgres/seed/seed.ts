@@ -41,7 +41,7 @@ export const seed = async (users: [], music: [], reviews: []) => {
 		review_title VARCHAR DEFAULT NULL,
 		review_body VARCHAR DEFAULT NULL
 		);`
-		);
+	);
 
 	//? Insert data
 	const formattedUsers = format(
@@ -87,34 +87,34 @@ export const seed = async (users: [], music: [], reviews: []) => {
 				item.type,
 				item.tracks,
 				item.album_id,
-				`{${item.genres.map((genre) => `${genre}`)}}`,
+				`{${item.genres}}`,
 				item.preview,
 				item.album_images.url,
 				item.release_date,
 			]
 		)
 	);
-  await db.query(formattedMusic);
-  
-  const formattedReviews = format(
-    `INSERT INTO reviews (screen_name, music_id, rating, review_title, review_body)
+	await db.query(formattedMusic);
+
+	const formattedReviews = format(
+		`INSERT INTO reviews (screen_name, music_id, rating, review_title, review_body)
     VALUES
     %L;`,
-    reviews.map(
-      (review: {
-        screen_name: string;
-        music_id: string;
-        rating: number;
-        review_title: string;
-        review_body: string;
-      }) => [
-        review.screen_name,
-        review.music_id,
-        review.rating,
-        review.review_title,
-        review.review_body,
-      ]
-    )
-  )
-  await db.query(formattedReviews);
+		reviews.map(
+			(review: {
+				screen_name: string;
+				music_id: string;
+				rating: number;
+				review_title: string;
+				review_body: string;
+			}) => [
+				review.screen_name,
+				review.music_id,
+				review.rating,
+				review.review_title,
+				review.review_body,
+			]
+		)
+	);
+	await db.query(formattedReviews);
 };
