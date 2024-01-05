@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { selectReviews } from "../models/review.models";
+import { insertReview, selectReviews } from "../models/review.models";
+import { errorMonitor } from "stream";
 
 export const getReviewsById = async (
   req: Request,
@@ -24,6 +25,30 @@ export const getAllReviews = async (
   try {
     const reviews = await selectReviews();
     res.status(200).send({ reviews });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const postReviewById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const {
+      body: { screen_name, rating, review_title, review_body },
+      params: { music_id },
+    } = req;
+
+    const review = await insertReview(
+      music_id,
+      screen_name,
+      rating,
+      review_title,
+      review_body
+    );
+    res.status(201).send({ review });
   } catch (err) {
     next(err);
   }
