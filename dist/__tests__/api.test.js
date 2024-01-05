@@ -126,6 +126,14 @@ describe("/api/music", () => {
                 });
             });
         });
+        it("200: should chain with other queries", () => {
+            return (0, supertest_1.default)(app_1.default)
+                .get("/api/music?music_id=1MVqeIAwhD4T44AKVkIfic&avg_rating=true")
+                .expect(200)
+                .then(({ body }) => {
+                expect(body.music).toHaveProperty("avg_rating");
+            });
+        });
     });
 });
 describe("/api/reviews", () => {

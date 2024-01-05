@@ -8,7 +8,7 @@ const connection_1 = __importDefault(require("../../db/postgres/connection"));
 const pg_format_1 = __importDefault(require("pg-format"));
 const selectAllMusic = (queries) => {
     const whereMusic_id = queries?.music_id
-        ? `WHERE music_id = '${queries?.music_id}'`
+        ? `WHERE music.music_id = '${queries?.music_id}'`
         : ``;
     const whereArtist_ids = queries?.artist_ids
         ? `WHERE '${queries?.artist_ids}' = ANY(artist_ids)`
@@ -23,14 +23,18 @@ const selectAllMusic = (queries) => {
         ? `OFFSET ${parseInt(queries?.p) * 30 - 30}`
         : ``;
     const aggAvgRating = queries?.avg_rating === "true"
-        ? `,  AVG(reviews.rating) AS avg_rating `
+        ? `,  ROUND(AVG(reviews.rating),1) AS avg_rating `
         : ``;
     const groupAvgRating = queries?.avg_rating === "true" ? `GROUP BY music.music_id` : ``;
     const joinAvgRating = queries?.avg_rating === "true"
-        ? `LEFT JOIN reviews ON music.music_id = reviews.music_id`
+        ? `FULL JOIN reviews ON music.music_id = reviews.music_id`
         : ``;
     const formattedMusicQuery = (0, pg_format_1.default)(`SELECT music.music_id, artist_ids, artist_names, name, type, tracks, album_id, genres, preview, album_img, release_date %s FROM music
-    %s %s %s %s %s
+    %s
+    %s
+    %s
+    %s
+    %s
     ORDER BY %s
     LIMIT 30
     %s
