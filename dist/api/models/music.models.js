@@ -22,15 +22,22 @@ const selectAllMusic = (queries) => {
     const pagination = queries?.p
         ? `OFFSET ${parseInt(queries?.p) * 30 - 30}`
         : ``;
-    const formattedMusicQuery = (0, pg_format_1.default)(`SELECT * FROM music
-    %s %s %s
+    const aggAvgRating = queries?.avg_rating === "true"
+        ? `,  AVG(reviews.rating) AS avg_rating `
+        : ``;
+    const groupAvgRating = queries?.avg_rating === "true" ? `GROUP BY music.music_id` : ``;
+    const joinAvgRating = queries?.avg_rating === "true"
+        ? `LEFT JOIN reviews ON music.music_id = reviews.music_id`
+        : ``;
+    const formattedMusicQuery = (0, pg_format_1.default)(`SELECT music.music_id, artist_ids, artist_names, name, type, tracks, album_id, genres, preview, album_img, release_date %s FROM music
+    %s %s %s %s %s
     ORDER BY %s
     LIMIT 30
     %s
-    ;`, whereMusic_id, whereArtist_ids, whereGenres, orderBy, pagination);
+    ;`, aggAvgRating, joinAvgRating, whereMusic_id, whereArtist_ids, whereGenres, groupAvgRating, orderBy, pagination);
     return connection_1.default.query(formattedMusicQuery).then(({ rows }) => {
         if (!rows.length) {
-            return Promise.reject({ status: 404 });
+            return Promise.reject({ status: 404, msg: "not found" });
         }
         else if (rows.length === 1) {
             return rows[0];

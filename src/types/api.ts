@@ -10,6 +10,7 @@ export interface Music {
   preview: string
   album_img: string
   release_date: string
+  avg_rating?: number
 }
 export interface MusicQueries {
   music_id?: string
@@ -17,6 +18,7 @@ export interface MusicQueries {
   genres?: string
   order?: 'ASC' | 'DESC'
   p?: string
+  avg_rating?: "true" | "false"
 }
 
 export interface CustomResponse extends Response {
