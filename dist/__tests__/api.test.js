@@ -172,5 +172,98 @@ describe("/api/reviews", () => {
                 });
             });
         });
+        describe("POST /api/reviews/:music_id", () => {
+            test("201: inserts a new review to the db and returns the new review back to the client", () => {
+                const newReview = {
+                    screen_name: "night_owl_philosopher",
+                    rating: 1,
+                    review_title: "Not what I was expecting",
+                    review_body: "I was expecting the song to be all about escaping being tied up underwater, what a disappointment!",
+                };
+                return (0, supertest_1.default)(app_1.default)
+                    .post("/api/reviews/4OMJGnvZfDvsePyCwRGO7X")
+                    .send(newReview)
+                    .expect(201)
+                    .then(({ body: { review } }) => {
+                    expect(review.review_id).toEqual(expect.any(Number));
+                    expect(review.review_title).toBe("Not what I was expecting");
+                    expect(review.review_body).toBe("I was expecting the song to be all about escaping being tied up underwater, what a disappointment!");
+                    expect(review.music_id).toBe("4OMJGnvZfDvsePyCwRGO7X");
+                    expect(review.screen_name).toBe("night_owl_philosopher");
+                    expect(review.rating).toBe(1);
+                    expect(review.created_at).toEqual(expect.any(String));
+                })
+                    .then(() => {
+                    return (0, supertest_1.default)(app_1.default)
+                        .get("/api/reviews/4OMJGnvZfDvsePyCwRGO7X")
+                        .expect(200);
+                })
+                    .then(({ body: { reviews } }) => {
+                    expect(reviews.some((review) => review.review_body ===
+                        "I was expecting the song to be all about escaping being tied up underwater, what a disappointment!")).toBe(true);
+                });
+            });
+            test("201: inserts a new review to the db and returns the new review back to the client, with optional fields omitted", () => {
+                const ratingOnlyReview = {
+                    screen_name: "night_owl_philosopher",
+                    rating: 3,
+                };
+                return (0, supertest_1.default)(app_1.default)
+                    .post("/api/reviews/2IGMVunIBsBLtEQyoI1Mu7")
+                    .send(ratingOnlyReview)
+                    .expect(201)
+                    .then(({ body: { review } }) => {
+                    expect(review.review_id).toEqual(expect.any(Number));
+                    expect(review.review_title).toBe(null);
+                    expect(review.review_body).toBe(null);
+                    expect(review.music_id).toBe("2IGMVunIBsBLtEQyoI1Mu7");
+                    expect(review.screen_name).toBe("night_owl_philosopher");
+                    expect(review.rating).toBe(3);
+                    expect(review.created_at).toEqual(expect.any(String));
+                });
+            });
+            test("POST:400 responds with an appropriate status and error message when provided with a bad review (missing required keys)", () => {
+                const badReview = {
+                    screen_name: "night_owl_philosopher",
+                    review_title: "I hate rating things, it seems petty",
+                };
+                return (0, supertest_1.default)(app_1.default)
+                    .post("/api/reviews/4OMJGnvZfDvsePyCwRGO7X")
+                    .send(badReview)
+                    .expect(400)
+                    .then(({ body: { msg } }) => {
+                    expect(msg).toBe("bad request");
+                });
+            });
+            test("POST:404 responds with an appropriate status and error message when provided with an incorrect screen name)", () => {
+                const incorrectScreenNameReview = {
+                    screen_name: "rumpelstiltskin",
+                    rating: 1,
+                    review_body: "I bet my name wasn't in your database",
+                };
+                return (0, supertest_1.default)(app_1.default)
+                    .post("/api/reviews/4OMJGnvZfDvsePyCwRGO7X")
+                    .send(incorrectScreenNameReview)
+                    .expect(404)
+                    .then(({ body: { msg } }) => {
+                    expect(msg).toBe("not found");
+                });
+            });
+            test("POST:404 sends an appropriate status and error message when given a valid but non-existent music id", () => {
+                const reviewOfNonExistentSong = {
+                    screen_name: "night_owl_philosopher",
+                    rating: 10,
+                    review_title: "Truly Wonderful",
+                    review_body: "I love to discuss the non-existent - the impossible! I'm the existentialism equivalent of Groucho Marx...",
+                };
+                return (0, supertest_1.default)(app_1.default)
+                    .post("/api/reviews/4OMJGnvPxDvsePyCwRGO0X")
+                    .send(reviewOfNonExistentSong)
+                    .expect(404)
+                    .then(({ body: { msg } }) => {
+                    expect(msg).toBe("not found");
+                });
+            });
+        });
     });
 });

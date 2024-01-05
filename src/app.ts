@@ -3,7 +3,7 @@ import apiRouter from "./api/routes/api.router";
 import reviewRouter from "./api/routes/review.router";
 import loginRouter from "./api/routes/login.router";
 import musicRouter from './api/routes/music.router'
-import {handle404} from './errors'
+import {handle404, handleCustomError, handlePsql23502, handlePsql23503} from './errors'
 import cors from "cors";
 
 const app = express();
@@ -17,6 +17,12 @@ app.use("/api/music", musicRouter);
 app.use("/api/reviews", reviewRouter);
 
 app.use("/api/login", loginRouter);
+
+app.use(handleCustomError);
+
+app.use(handlePsql23502);
+
+app.use(handlePsql23503);
 
 app.all('*', handle404)
 
