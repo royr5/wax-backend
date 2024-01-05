@@ -126,4 +126,27 @@ describe("/api/reviews", () => {
             });
         });
     });
+    describe("/api/reviews/:music_id", () => {
+        describe("GET /api/reviews/:music_id", () => {
+            it("200: should return an array of review objects with passed music_id", () => {
+                return (0, supertest_1.default)(app_1.default)
+                    .get("/api/reviews/2IGMVunIBsBLtEQyoI1Mu7")
+                    .expect(200)
+                    .then((response) => {
+                    const { body } = response;
+                    body.reviews.forEach((review) => {
+                        expect(review).toMatchObject({
+                            review_id: expect.any(Number),
+                            music_id: "2IGMVunIBsBLtEQyoI1Mu7",
+                            screen_name: expect.any(String),
+                            rating: expect.any(Number),
+                            review_title: expect.any(String || null),
+                            review_body: expect.any(String || null),
+                            created_at: expect.any(String),
+                        });
+                    });
+                });
+            });
+        });
+    });
 });
