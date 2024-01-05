@@ -8,7 +8,7 @@ const getAllMusic = (req, res, next) => {
         res.status(200).send({ music });
     })
         .catch((err) => {
-        res.status(404).send({ msg: 'not found' });
+        res.status(404).send({ msg: "not found" });
     });
 };
 exports.getAllMusic = getAllMusic;
