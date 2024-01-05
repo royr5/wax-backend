@@ -13,9 +13,15 @@ const selectAllMusic = (queries) => {
     const whereArtist_ids = queries?.artist_ids
         ? `WHERE '${queries?.artist_ids}' = ANY(artist_ids)`
         : ``;
-    const whereGenres = queries?.genres ? `WHERE genres = ${queries?.genres}` : ``;
-    const orderBy = queries?.order ? `release_date ${queries?.order}` : `release_date DESC`;
-    const pagination = queries?.p ? `OFFSET ${(parseInt(queries?.p) * 30) - 30}` : ``;
+    const whereGenres = queries?.genres
+        ? `WHERE '${queries?.genres.charAt(0).toUpperCase() + queries?.genres.slice(1)}' = ANY(genres)`
+        : ``;
+    const orderBy = queries?.order
+        ? `release_date ${queries?.order}`
+        : `release_date DESC`;
+    const pagination = queries?.p
+        ? `OFFSET ${parseInt(queries?.p) * 30 - 30}`
+        : ``;
     const formattedMusicQuery = (0, pg_format_1.default)(`SELECT * FROM music
     %s %s %s
     ORDER BY %s
