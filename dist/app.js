@@ -8,10 +8,12 @@ const api_router_1 = __importDefault(require("./api/routes/api.router"));
 const review_router_1 = __importDefault(require("./api/routes/review.router"));
 const login_router_1 = __importDefault(require("./api/routes/login.router"));
 const music_router_1 = __importDefault(require("./api/routes/music.router"));
+const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
+app.use((0, cors_1.default)());
 app.use(express_1.default.json());
-app.use('/api', api_router_1.default);
-app.use('/api/music', music_router_1.default);
+app.use("/api", api_router_1.default);
+app.use("/api/music", music_router_1.default);
 app.use("/api/reviews", review_router_1.default);
 app.use("/api/login", login_router_1.default);
 // app.all('*', (req: Request, res: Response) => {
