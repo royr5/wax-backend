@@ -40,4 +40,15 @@ describe("postgres", () => {
 			row.preview !== null && expect(typeof row.preview).toBe("string");
 		});
 	});
+	it("should contain all reviews", async () => {
+		const { rows } = await pgDb.query(`SELECT * FROM reviews;`);
+		expect(rows).toMatchObject({
+			review_id: expect.any(String),
+			screen_name: expect.any(String),
+			music_id: expect.any(String),
+			rating: expect.any(Number),
+			review_title: expect.any(String),
+			review_body: expect.any(String),
+		});
+	})
 });
