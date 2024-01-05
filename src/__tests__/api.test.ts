@@ -12,6 +12,7 @@ afterAll(() => {
 beforeEach(() => {
   return seed(users as [], music as [], reviews as []);
 });
+
 describe("/api/music", () => {
   describe("GET /api/music", () => {
     test("200: should return an array of object with all music", () => {
@@ -124,6 +125,14 @@ describe("/api/music", () => {
           body.music.forEach((song: Music) => {
             expect(song).not.toHaveProperty("avg_rating");
           });
+        });
+    });
+    it("200: should chain with other queries", () => {
+      return request(app)
+        .get("/api/music?music_id=1MVqeIAwhD4T44AKVkIfic&avg_rating=true")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.music).toHaveProperty("avg_rating");
         });
     });
   });

@@ -6,7 +6,7 @@ export const selectAllMusic = (
   queries?: MusicQueries
 ): Promise<Music | Music[]> => {
   const whereMusic_id = queries?.music_id
-    ? `WHERE music_id = '${queries?.music_id}'`
+    ? `WHERE music.music_id = '${queries?.music_id}'`
     : ``;
 
   const whereArtist_ids = queries?.artist_ids
@@ -29,7 +29,7 @@ export const selectAllMusic = (
 
   const aggAvgRating =
     queries?.avg_rating === "true"
-      ? `,  AVG(reviews.rating) AS avg_rating `
+      ? `,  ROUND(AVG(reviews.rating),1) AS avg_rating `
       : ``;
 
   const groupAvgRating =
@@ -37,12 +37,16 @@ export const selectAllMusic = (
 
   const joinAvgRating =
     queries?.avg_rating === "true"
-      ? `LEFT JOIN reviews ON music.music_id = reviews.music_id`
+      ? `FULL JOIN reviews ON music.music_id = reviews.music_id`
       : ``;
 
   const formattedMusicQuery = format(
     `SELECT music.music_id, artist_ids, artist_names, name, type, tracks, album_id, genres, preview, album_img, release_date %s FROM music
-    %s %s %s %s %s
+    %s
+    %s
+    %s
+    %s
+    %s
     ORDER BY %s
     LIMIT 30
     %s
@@ -56,6 +60,7 @@ export const selectAllMusic = (
     orderBy,
     pagination
   );
+
   return db.query(formattedMusicQuery).then(({ rows }: { rows: Music[] }) => {
     if (!rows.length) {
       return Promise.reject({ status: 404, msg: "not found" });
