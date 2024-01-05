@@ -23,15 +23,23 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const pg_1 = require("pg");
-const dotenv = __importStar(require("dotenv"));
-const ENV = process.env.NODE_ENV || "dev";
-dotenv.config({ path: `${__dirname}/../../../.env.${ENV}` });
-const config = {};
-if (ENV === "prod") {
-    config.ssl = { rejectUnauthorized: false };
-}
-if (!process.env.PGDATABASE && !process.env.DATABASE_URL) {
-    throw new Error("PGDATABASE or DATABASE_URL not set");
-}
-exports.default = new pg_1.Pool(config);
+const fs = __importStar(require("fs/promises"));
+const doThis = async () => {
+    const unformatted = await fs.readFile(`${__dirname}/db/postgres/test-data/music.json`, "utf-8");
+    const formatted = JSON.parse(unformatted);
+    const output = formatted.tracks.items.map((song) => {
+        return {
+            preview: song.track.preview_url,
+            type: song.track.album.album_type,
+            name: song.track.name,
+            music_id: song.track.id,
+            artists: song.track.artists,
+            album_id: song.track.album.id,
+            album_images: song.track.album.images[0],
+            album_name: song.track.album.name,
+            release_date: song.track.album.release_date,
+        };
+    });
+    await fs.writeFile(`${__dirname}/db/postgres/test-data/formatted-music.json`, JSON.stringify(output));
+};
+doThis();
