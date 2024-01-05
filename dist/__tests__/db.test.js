@@ -7,17 +7,17 @@ const connection_1 = __importDefault(require("../db/postgres/connection"));
 const seed_1 = require("../db/postgres/seed/seed");
 const test_data_json_1 = require("../db/postgres/data/test-data.json");
 beforeAll(async () => {
-    await (0, seed_1.seed)(test_data_json_1.users, test_data_json_1.music);
+    await (0, seed_1.seed)(test_data_json_1.users, test_data_json_1.music, test_data_json_1.reviews);
 });
 afterAll(async () => {
     await connection_1.default.end();
 });
-describe('postgres', () => {
-    it('should contain all users', async () => {
+describe("postgres", () => {
+    it("should contain all users", async () => {
         const { rows } = await connection_1.default.query(`SELECT * FROM users;`);
         expect(rows).toMatchObject(test_data_json_1.users);
     });
-    it('should contain all music', async () => {
+    it("should contain all music", async () => {
         const { rows } = await connection_1.default.query(`SELECT * FROM music;`);
         rows.forEach((row) => {
             expect(row).toMatchObject({
@@ -29,10 +29,17 @@ describe('postgres', () => {
                 album_id: expect.any(String),
                 release_date: expect.any(Date),
             });
-            expect(String(row.genres)).toMatch(/\[.*\]|null/i);
-            expect(String(row.tracks)).toMatch(/\[.*\]|null/i);
-            expect(String(row.album_img)).toMatch(/\w|null/i);
-            expect(String(row.preview)).toMatch(/\w|null/i);
+            row.genres !== null &&
+                row.genres.forEach((genre) => {
+                    expect(typeof genre).toBe("string");
+                });
+            row.tracks !== null &&
+                row.tracks.forEach((track) => {
+                    expect(typeof track).toBe("string");
+                });
+            row.album_img !== null &&
+                expect(typeof row.album_img).toBe("string");
+            row.preview !== null && expect(typeof row.preview).toBe("string");
         });
     });
 });
