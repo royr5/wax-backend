@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-tsc
-npm testtsc && npm test
+tsc && npm run test
