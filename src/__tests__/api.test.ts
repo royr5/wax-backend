@@ -2,10 +2,6 @@ import request from "supertest";
 import app from "../app";
 import { Review } from "../types/api";
 
-describe("", () => {
-  test("should ", () => {});
-});
-
 describe("/api/reviews", () => {
   describe("GET /api/reviews", () => {
     it("200: should return an array of review objects", () => {
