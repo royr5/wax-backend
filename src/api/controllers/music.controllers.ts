@@ -10,7 +10,7 @@ export const getAllMusic = (
     .then((music) => {
       res.status(200).send({ music });
     })
-      .catch((err) => {
-      res.status(404).send({ msg: "not found" });
+    .catch((err: Error) => {
+      next(err);
     });
 };
