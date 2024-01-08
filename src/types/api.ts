@@ -33,3 +33,9 @@ export interface Review {
 	review_body: string | null;
 	created_at?: string;
 }
+
+export interface Users {
+  screen_name: string,
+  avatar_url: string,
+  bio: string
+}
