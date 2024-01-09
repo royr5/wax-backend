@@ -1,5 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { insertReview, selectReviews } from "../models/review.models";
+import {
+  deleteReview,
+  insertReview,
+  selectReviews,
+} from "../models/review.models";
 import { errorMonitor } from "stream";
 
 export const getReviewsById = async (
@@ -49,6 +53,20 @@ export const postReviewById = async (
       review_body
     );
     res.status(201).send({ review });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const removeReview = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { review_id } = req.params;
+  try {
+    await deleteReview(review_id);
+    res.status(204).send()
   } catch (err) {
     next(err);
   }
