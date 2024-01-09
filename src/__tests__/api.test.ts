@@ -149,7 +149,7 @@ describe("/api/reviews", () => {
           body.reviews.forEach((review: any) => {
             expect(review).toMatchObject({
               music_id: expect.any(String),
-              screen_name: expect.any(String),
+              username: expect.any(String),
               rating: expect.any(Number),
               review_id: expect.any(Number),
               review_title: expect.any(String || null),
@@ -173,7 +173,7 @@ describe("/api/reviews", () => {
               expect(review).toMatchObject({
                 review_id: expect.any(Number),
                 music_id: "2IGMVunIBsBLtEQyoI1Mu7",
-                screen_name: expect.any(String),
+                username: expect.any(String),
                 rating: expect.any(Number),
                 review_title: expect.any(String || null),
                 review_body: expect.any(String || null),
@@ -186,7 +186,7 @@ describe("/api/reviews", () => {
     describe("POST /api/reviews/:music_id", () => {
       test("201: inserts a new review to the db and returns the new review back to the client", () => {
         const newReview = {
-          screen_name: "night_owl_philosopher",
+          username: "night_owl_philosopher",
           rating: 1,
           review_title: "Not what I was expecting",
           review_body:
@@ -203,7 +203,7 @@ describe("/api/reviews", () => {
               "I was expecting the song to be all about escaping being tied up underwater, what a disappointment!"
             );
             expect(review.music_id).toBe("4OMJGnvZfDvsePyCwRGO7X");
-            expect(review.screen_name).toBe("night_owl_philosopher");
+            expect(review.username).toBe("night_owl_philosopher");
             expect(review.rating).toBe(1);
             expect(review.created_at).toEqual(expect.any(String));
           })
@@ -224,7 +224,7 @@ describe("/api/reviews", () => {
       });
       test("201: inserts a new review to the db and returns the new review back to the client, with optional fields omitted", () => {
         const ratingOnlyReview = {
-          screen_name: "night_owl_philosopher",
+          username: "night_owl_philosopher",
           rating: 3,
         };
         return request(app)
@@ -236,14 +236,14 @@ describe("/api/reviews", () => {
             expect(review.review_title).toBe(null);
             expect(review.review_body).toBe(null);
             expect(review.music_id).toBe("2IGMVunIBsBLtEQyoI1Mu7");
-            expect(review.screen_name).toBe("night_owl_philosopher");
+            expect(review.username).toBe("night_owl_philosopher");
             expect(review.rating).toBe(3);
             expect(review.created_at).toEqual(expect.any(String));
           });
       });
       test("POST:400 responds with an appropriate status and error message when provided with a bad review (missing required keys)", () => {
         const badReview = {
-          screen_name: "night_owl_philosopher",
+          username: "night_owl_philosopher",
           review_title: "I hate rating things, it seems petty",
         };
 
@@ -257,7 +257,7 @@ describe("/api/reviews", () => {
       });
       test("POST:404 responds with an appropriate status and error message when provided with an incorrect screen name)", () => {
         const incorrectScreenNameReview = {
-          screen_name: "rumpelstiltskin",
+          username: "rumpelstiltskin",
           rating: 1,
           review_body: "I bet my name wasn't in your database",
         };
@@ -272,7 +272,7 @@ describe("/api/reviews", () => {
       });
       test("POST:404 sends an appropriate status and error message when given a valid but non-existent music id", () => {
         const reviewOfNonExistentSong = {
-          screen_name: "night_owl_philosopher",
+          username: "night_owl_philosopher",
           rating: 10,
           review_title: "Truly Wonderful",
           review_body:

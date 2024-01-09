@@ -4,17 +4,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.seed = void 0;
-const connection_1 = __importDefault(require("../connection"));
+const connection_1 = __importDefault(require("./connection"));
 const pg_format_1 = __importDefault(require("pg-format"));
-const seed = async (users, music, reviews) => {
+const seed = async (users, music) => {
     //? Drop tables if they exist
-    await connection_1.default.query(`DROP TABLE IF EXISTS reviews`);
-    await connection_1.default.query(`DROP TABLE IF EXISTS music;`);
     await connection_1.default.query(`DROP TABLE IF EXISTS users;`);
+    await connection_1.default.query(`DROP TABLE IF EXISTS music;`);
     //? Create tables
     await connection_1.default.query(`CREATE TABLE users (
-        user_id SERIAL,
-        username VARCHAR PRIMARY KEY,
+        user_id SERIAL PRIMARY KEY,
+        username VARCHAR NOT NULL,
         avatar_url VARCHAR DEFAULT NULL,
         bio VARCHAR DEFAULT NULL
         );`);
@@ -30,16 +29,7 @@ const seed = async (users, music, reviews) => {
         preview VARCHAR DEFAULT NULL,
         album_img VARCHAR DEFAULT NULL,
         release_date DATE NOT NULL
-        );`);
-    await connection_1.default.query(`CREATE TABLE reviews (
-		review_id SERIAL PRIMARY KEY,
-		username VARCHAR REFERENCES users(username),
-		music_id VARCHAR REFERENCES music(music_id),
-		rating INTEGER NOT NULL,
-		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-		review_title VARCHAR DEFAULT NULL,
-		review_body VARCHAR DEFAULT NULL
-		);`);
+        )`);
     //? Insert data
     const formattedUsers = (0, pg_format_1.default)(`
         INSERT INTO users (username, avatar_url, bio)
@@ -57,21 +47,11 @@ const seed = async (users, music, reviews) => {
         item.type,
         item.tracks,
         item.album_id,
-        `{${item.genres}}`,
+        item.genres,
         item.preview,
         item.album_images.url,
         item.release_date,
     ]));
     await connection_1.default.query(formattedMusic);
-    const formattedReviews = (0, pg_format_1.default)(`INSERT INTO reviews (username, music_id, rating, review_title, review_body)
-    VALUES
-    %L;`, reviews.map((review) => [
-        review.username,
-        review.music_id,
-        review.rating,
-        review.review_title,
-        review.review_body,
-    ]));
-    await connection_1.default.query(formattedReviews);
 };
 exports.seed = seed;

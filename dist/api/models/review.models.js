@@ -16,10 +16,10 @@ const selectReviews = async (id) => {
     return rows;
 };
 exports.selectReviews = selectReviews;
-const insertReview = async (music_id, screen_name, rating, review_title, review_body) => {
+const insertReview = async (music_id, username, rating, review_title, review_body) => {
     const { rows: [review], } = await connection_1.default.query(`INSERT INTO reviews (
       music_id,
-      screen_name,
+      username,
       rating,
       review_title,
       review_body,
@@ -33,7 +33,7 @@ const insertReview = async (music_id, screen_name, rating, review_title, review_
       $5,
       NOW()
     )
-    RETURNING *;`, [music_id, screen_name, rating, review_title, review_body]);
+    RETURNING *;`, [music_id, username, rating, review_title, review_body]);
     return review;
 };
 exports.insertReview = insertReview;
