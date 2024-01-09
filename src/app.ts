@@ -4,11 +4,11 @@ import reviewRouter from "./api/routes/review.router";
 import loginRouter from "./api/routes/login.router";
 import musicRouter from './api/routes/music.router'
 import {handle404, handleCustomError, handlePsql23502, handlePsql23503} from './errors'
-import cors from "cors";
+import serverless from "serverless-http";
+
 
 const app = express();
 
-app.use(cors());
 app.use(express.json());
 
 app.use("/api", apiRouter);
@@ -25,5 +25,7 @@ app.use(handlePsql23502);
 app.use(handlePsql23503);
 
 app.all('*', handle404)
+
+export const handler = serverless(app)
 
 export default app;
