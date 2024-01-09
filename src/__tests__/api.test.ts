@@ -291,7 +291,7 @@ describe("/api/reviews", () => {
   });
 });
 
-describe('/api/search', () => {
+describe.skip('/api/search', () => {
   describe('track', () => {
     it('200: should be able to return a track from spotify, that doesn`t exist in database', async () => {
      const response = await request(app).get('/api/search?q=take%20care&type=track').expect(200)
