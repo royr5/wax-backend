@@ -32,4 +32,5 @@ export interface Review {
 	review_title: string | null;
 	review_body: string | null;
 	created_at?: string;
+  review_id?: number
 }
