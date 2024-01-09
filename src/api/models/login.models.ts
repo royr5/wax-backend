@@ -71,6 +71,7 @@ export const requestToken = async (req: Request, res: Response) => {
   });
 
   //! dev use only
-  console.log(Object.keys(tokenData));
-  console.log(tokenData.data);
+  // console.log(Object.keys(tokenData));
+  // console.log(tokenData.data);
+
 };

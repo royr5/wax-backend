@@ -85,7 +85,7 @@ const requestToken = async (req, res) => {
         headers: authOptions.headers,
     });
     //! dev use only
-    console.log(Object.keys(tokenData));
-    console.log(tokenData.data);
+    // console.log(Object.keys(tokenData));
+    // console.log(tokenData.data);
 };
 exports.requestToken = requestToken;

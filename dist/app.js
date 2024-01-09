@@ -22,6 +22,6 @@ app.use("/api/search", search_router_1.default);
 app.use(errors_1.handleCustomError);
 app.use(errors_1.handlePsql23502);
 app.use(errors_1.handlePsql23503);
-app.all('*', errors_1.handle404);
+app.all("*", errors_1.handle404);
 exports.handler = (0, serverless_http_1.default)(app);
 exports.default = app;
