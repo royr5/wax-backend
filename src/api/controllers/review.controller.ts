@@ -37,13 +37,13 @@ export const postReviewById = async (
 ): Promise<void> => {
   try {
     const {
-      body: { screen_name, rating, review_title, review_body },
+      body: { username, rating, review_title, review_body },
       params: { music_id },
     } = req;
 
     const review = await insertReview(
       music_id,
-      screen_name,
+      username,
       rating,
       review_title,
       review_body

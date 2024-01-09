@@ -13,8 +13,8 @@ const seed = async (users, music, reviews) => {
     await connection_1.default.query(`DROP TABLE IF EXISTS users;`);
     //? Create tables
     await connection_1.default.query(`CREATE TABLE users (
-        user_id SERIAL PRIMARY KEY,
-        screen_name VARCHAR UNIQUE NOT NULL,
+        user_id SERIAL,
+        username VARCHAR PRIMARY KEY,
         avatar_url VARCHAR DEFAULT NULL,
         bio VARCHAR DEFAULT NULL
         );`);
@@ -33,7 +33,7 @@ const seed = async (users, music, reviews) => {
         );`);
     await connection_1.default.query(`CREATE TABLE reviews (
 		review_id SERIAL PRIMARY KEY,
-		screen_name VARCHAR REFERENCES users(screen_name),
+		username VARCHAR REFERENCES users(username),
 		music_id VARCHAR REFERENCES music(music_id),
 		rating INTEGER NOT NULL,
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -42,9 +42,9 @@ const seed = async (users, music, reviews) => {
 		);`);
     //? Insert data
     const formattedUsers = (0, pg_format_1.default)(`
-        INSERT INTO users (screen_name, avatar_url, bio)
+        INSERT INTO users (username, avatar_url, bio)
         VALUES
-        %L;`, users.map((user) => [user.screen_name, user.avatar_url, user.bio]));
+        %L;`, users.map((user) => [user.username, user.avatar_url, user.bio]));
     await connection_1.default.query(formattedUsers);
     const formattedMusic = (0, pg_format_1.default)(`
         INSERT INTO music (music_id, artist_ids, artist_names, name, type, tracks, album_id, genres, preview, album_img, release_date)
@@ -63,10 +63,10 @@ const seed = async (users, music, reviews) => {
         item.release_date,
     ]));
     await connection_1.default.query(formattedMusic);
-    const formattedReviews = (0, pg_format_1.default)(`INSERT INTO reviews (screen_name, music_id, rating, review_title, review_body)
+    const formattedReviews = (0, pg_format_1.default)(`INSERT INTO reviews (username, music_id, rating, review_title, review_body)
     VALUES
     %L;`, reviews.map((review) => [
-        review.screen_name,
+        review.username,
         review.music_id,
         review.rating,
         review.review_title,

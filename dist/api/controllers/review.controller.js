@@ -25,8 +25,8 @@ const getAllReviews = async (_req, res, next) => {
 exports.getAllReviews = getAllReviews;
 const postReviewById = async (req, res, next) => {
     try {
-        const { body: { screen_name, rating, review_title, review_body }, params: { music_id }, } = req;
-        const review = await (0, review_models_1.insertReview)(music_id, screen_name, rating, review_title, review_body);
+        const { body: { username, rating, review_title, review_body }, params: { music_id }, } = req;
+        const review = await (0, review_models_1.insertReview)(music_id, username, rating, review_title, review_body);
         res.status(201).send({ review });
     }
     catch (err) {

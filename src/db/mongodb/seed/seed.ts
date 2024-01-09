@@ -6,9 +6,9 @@ async function addUsers() {
     try{
 
         const database = await client.db('gatefold_users')
-        const drop = await database.collection('users').drop()
-        console.log(`users collection dropped = ${drop}`);
         const usersCol = database.collection<Users>('users')
+        const drop = await usersCol.deleteMany({})
+        console.log(`Users removed- ${drop}`);
         
         
 

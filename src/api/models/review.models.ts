@@ -17,12 +17,12 @@ export const selectReviews = async (id?: string): Promise<Review[]> => {
   return rows as Review[];
 };
 
-export const insertReview = async (music_id: string, screen_name: string, rating: number, review_title?: string, review_body?: string): Promise<Review[]> => {
+export const insertReview = async (music_id: string, username: string, rating: number, review_title?: string, review_body?: string): Promise<Review[]> => {
 
   const {rows: [review]} = await db.query(
     `INSERT INTO reviews (
       music_id,
-      screen_name,
+      username,
       rating,
       review_title,
       review_body,
@@ -37,7 +37,7 @@ export const insertReview = async (music_id: string, screen_name: string, rating
       NOW()
     )
     RETURNING *;`,
-    [music_id, screen_name, rating, review_title, review_body]
+    [music_id, username, rating, review_title, review_body]
   )
   return review
 }

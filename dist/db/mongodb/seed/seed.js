@@ -8,9 +8,9 @@ const test_data_json_1 = require("../../postgres/data/test-data.json");
 async function addUsers() {
     try {
         const database = await connection_1.default.db('gatefold_users');
-        const drop = await database.collection('users').drop();
-        console.log(`users collection dropped = ${drop}`);
         const usersCol = database.collection('users');
+        const drop = await usersCol.deleteMany({});
+        console.log(`Users removed- ${drop}`);
         const result = await usersCol.insertMany(test_data_json_1.users);
         console.log(`Inserted ids: ${result.insertedIds}`);
     }

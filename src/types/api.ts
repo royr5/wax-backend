@@ -27,7 +27,7 @@ export interface CustomResponse extends Response {
 
 export interface Review {
 	music_id: number;
-	screen_name: number;
+	username: number;
 	rating: number;
 	review_title: string | null;
 	review_body: string | null;
@@ -35,7 +35,7 @@ export interface Review {
 }
 
 export interface Users {
-  screen_name: string,
+  username: string,
   avatar_url: string,
   bio: string
 }

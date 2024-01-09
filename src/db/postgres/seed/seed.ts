@@ -10,8 +10,8 @@ export const seed = async (users: [], music: [], reviews: []) => {
 	//? Create tables
 	await db.query(
 		`CREATE TABLE users (
-        user_id SERIAL PRIMARY KEY,
-        screen_name VARCHAR UNIQUE NOT NULL,
+        user_id SERIAL,
+        username VARCHAR PRIMARY KEY,
         avatar_url VARCHAR DEFAULT NULL,
         bio VARCHAR DEFAULT NULL
         );`
@@ -34,7 +34,7 @@ export const seed = async (users: [], music: [], reviews: []) => {
 	await db.query(
 		`CREATE TABLE reviews (
 		review_id SERIAL PRIMARY KEY,
-		screen_name VARCHAR REFERENCES users(screen_name),
+		username VARCHAR REFERENCES users(username),
 		music_id VARCHAR REFERENCES music(music_id),
 		rating INTEGER NOT NULL,
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -46,15 +46,15 @@ export const seed = async (users: [], music: [], reviews: []) => {
 	//? Insert data
 	const formattedUsers = format(
 		`
-        INSERT INTO users (screen_name, avatar_url, bio)
+        INSERT INTO users (username, avatar_url, bio)
         VALUES
         %L;`,
 		users.map(
 			(user: {
-				screen_name: string;
+				username: string;
 				avatar_url: string;
 				bio: string;
-			}) => [user.screen_name, user.avatar_url, user.bio]
+			}) => [user.username, user.avatar_url, user.bio]
 		)
 	);
 	await db.query(formattedUsers);
@@ -97,18 +97,18 @@ export const seed = async (users: [], music: [], reviews: []) => {
 	await db.query(formattedMusic);
 
 	const formattedReviews = format(
-		`INSERT INTO reviews (screen_name, music_id, rating, review_title, review_body)
+		`INSERT INTO reviews (username, music_id, rating, review_title, review_body)
     VALUES
     %L;`,
 		reviews.map(
 			(review: {
-				screen_name: string;
+				username: string;
 				music_id: string;
 				rating: number;
 				review_title: string;
 				review_body: string;
 			}) => [
-				review.screen_name,
+				review.username,
 				review.music_id,
 				review.rating,
 				review.review_title,
