@@ -4,6 +4,7 @@ import { Music, Review } from "../types/api";
 import db from ".././db/postgres/connection";
 import { users, music, reviews } from "../db/postgres/data/test-data.json";
 import { seed } from "../db/postgres/seed/seed";
+import { Response } from "express";
 
 afterAll(() => {
   db.end();
@@ -291,12 +292,16 @@ describe("/api/reviews", () => {
   });
 });
 
-describe.skip('/api/search', () => {
-  describe('track', () => {
-    it('200: should be able to return a track from spotify, that doesn`t exist in database', async () => {
-     const response = await request(app).get('/api/search?q=take%20care&type=track').expect(200)
+describe("/api/search", () => {
+  describe("track", () => {
+    it("200: should be able to return a track from spotify, that doesn`t exist in database", () => {
+      return request(app)
+        .get("/api/search?q=take%20care&type=track")
+        .expect(200)
 
-    //  console.log(response , "<-- Tes");
+        .then(({ body }) => {
+          expect(body).toHaveProperty("tracks");
+        });
     });
   });
 });

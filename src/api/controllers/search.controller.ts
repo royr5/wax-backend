@@ -17,5 +17,5 @@ export const getSearchedMusic = async (
     type as string
   );
 
-  console.log("🚀 ~ matchedMusic:", matchedMusic!.data);
+  res.status(200).send(matchedMusic!.data);
 };

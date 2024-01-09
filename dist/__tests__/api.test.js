@@ -275,11 +275,15 @@ describe("/api/reviews", () => {
         });
     });
 });
-describe.skip('/api/search', () => {
-    describe('track', () => {
-        it('200: should be able to return a track from spotify, that doesn`t exist in database', async () => {
-            const response = await (0, supertest_1.default)(app_1.default).get('/api/search?q=take%20care&type=track').expect(200);
-            //  console.log(response , "<-- Tes");
+describe("/api/search", () => {
+    describe("track", () => {
+        it("200: should be able to return a track from spotify, that doesn`t exist in database", () => {
+            return (0, supertest_1.default)(app_1.default)
+                .get("/api/search?q=take%20care&type=track")
+                .expect(200)
+                .then(({ body }) => {
+                expect(body).toHaveProperty("tracks");
+            });
         });
     });
 });
