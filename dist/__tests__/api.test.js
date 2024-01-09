@@ -274,4 +274,34 @@ describe("/api/reviews", () => {
             });
         });
     });
+    describe("/api/reviews/:review_id", () => {
+        it("204: should delete review from database", async () => {
+            await (0, supertest_1.default)(app_1.default).delete("/api/reviews/1").expect(204);
+            return (0, supertest_1.default)(app_1.default)
+                .get("/api/reviews")
+                .expect(200)
+                .then((response) => {
+                const { body } = response;
+                body.reviews.every((review) => {
+                    review.review_id !== 1;
+                });
+            });
+        });
+    });
+    test("404 responds with an appropriate status and error message when given a non-existent id", () => {
+        return (0, supertest_1.default)(app_1.default)
+            .delete("/api/reviews/999")
+            .expect(404)
+            .then(({ body: { msg } }) => {
+            expect(msg).toBe("not found");
+        });
+    });
+    test.only("400 responds with an appropriate status and error message when given an invalid id", () => {
+        return (0, supertest_1.default)(app_1.default)
+            .delete("/api/reviews/no-review")
+            .expect(400)
+            .then(({ body: { msg } }) => {
+            expect(msg).toBe("bad request");
+        });
+    });
 });
