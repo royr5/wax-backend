@@ -26,12 +26,36 @@ export interface CustomResponse extends Response {
 }
 
 export interface Review {
-  music_id: number;
-  screen_name: number;
-  rating: number;
-  review_title: string | null;
-  review_body: string | null;
-  created_at?: string;
+
+music_id: number;
+username: number;
+rating: number;
+review_title: string | null;
+review_body: string | null;
+created_at?: string;
+review_id?: number
+}
+
+export interface Users {
+  username: string,
+  avatar_url: string,
+  bio: string
+}
+
+export interface MongoUsers {
+  username: string,
+  password: string
+}
+
+export interface Users {
+  username: string,
+  avatar_url: string,
+  bio: string
+}
+
+export interface MongoUsers {
+  username: string,
+  password: string
 }
 
 export interface SpotifyQueries {

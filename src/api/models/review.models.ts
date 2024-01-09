@@ -10,19 +10,26 @@ export const selectReviews = async (id?: string): Promise<Review[]> => {
     %s
     ORDER BY created_at DESC
     ;`,
-      whereClause
-    );
+    whereClause
+  );
 
   const { rows } = await db.query(formattedQuery);
   return rows as Review[];
 };
 
-export const insertReview = async (music_id: string, screen_name: string, rating: number, review_title?: string, review_body?: string): Promise<Review[]> => {
-
-  const {rows: [review]} = await db.query(
+export const insertReview = async (
+  music_id: string,
+  username: string,
+  rating: number,
+  review_title?: string,
+  review_body?: string
+): Promise<Review[]> => {
+  const {
+    rows: [review],
+  } = await db.query(
     `INSERT INTO reviews (
       music_id,
-      screen_name,
+      username,
       rating,
       review_title,
       review_body,
@@ -37,7 +44,19 @@ export const insertReview = async (music_id: string, screen_name: string, rating
       NOW()
     )
     RETURNING *;`,
-    [music_id, screen_name, rating, review_title, review_body]
-  )
-  return review
-}
+    [music_id, username, rating, review_title, review_body]
+  );
+  return review;
+};
+
+export const deleteReview = async (id: string) => {
+  const { rows } = await db.query(
+    `DELETE FROM reviews
+    WHERE review_id = $1
+    RETURNING *
+    ;`,
+    [id]
+  );
+
+  if (!rows.length) return Promise.reject({ status: 404, msg: "not found" });
+};

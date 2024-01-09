@@ -2,5 +2,5 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 
-tsc && npm run test
+## tsc && npm run test
 

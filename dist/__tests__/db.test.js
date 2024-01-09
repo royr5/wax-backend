@@ -46,7 +46,7 @@ describe("postgres", () => {
         rows.forEach((row) => {
             expect(row).toMatchObject({
                 review_id: expect.any(Number),
-                screen_name: expect.any(String),
+                username: expect.any(String),
                 music_id: expect.any(String),
                 rating: expect.any(Number),
                 review_title: expect.any(String),

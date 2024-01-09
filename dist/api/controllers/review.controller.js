@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postReviewById = exports.getAllReviews = exports.getReviewsById = void 0;
+exports.removeReview = exports.postReviewById = exports.getAllReviews = exports.getReviewsById = void 0;
 const review_models_1 = require("../models/review.models");
 const getReviewsById = async (req, res, next) => {
     const { music_id } = req.params;
@@ -25,8 +25,8 @@ const getAllReviews = async (_req, res, next) => {
 exports.getAllReviews = getAllReviews;
 const postReviewById = async (req, res, next) => {
     try {
-        const { body: { screen_name, rating, review_title, review_body }, params: { music_id }, } = req;
-        const review = await (0, review_models_1.insertReview)(music_id, screen_name, rating, review_title, review_body);
+        const { body: { username, rating, review_title, review_body }, params: { music_id }, } = req;
+        const review = await (0, review_models_1.insertReview)(music_id, username, rating, review_title, review_body);
         res.status(201).send({ review });
     }
     catch (err) {
@@ -34,3 +34,14 @@ const postReviewById = async (req, res, next) => {
     }
 };
 exports.postReviewById = postReviewById;
+const removeReview = async (req, res, next) => {
+    const { review_id } = req.params;
+    try {
+        await (0, review_models_1.deleteReview)(review_id);
+        res.status(204).send();
+    }
+    catch (err) {
+        next(err);
+    }
+};
+exports.removeReview = removeReview;
