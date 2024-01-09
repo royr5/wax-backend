@@ -314,7 +314,7 @@ describe("/api/reviews", () => {
         expect(msg).toBe("not found");
       });
   });
-  test.only("400 responds with an appropriate status and error message when given an invalid id", () => {
+  test("400 responds with an appropriate status and error message when given an invalid id", () => {
     return request(app)
       .delete("/api/reviews/no-review")
       .expect(400)
@@ -333,6 +333,16 @@ describe("/api/search", () => {
 
         .then(({ body }) => {
           expect(body).toHaveProperty("tracks");
+        });
+    });
+  });
+  describe("albums", () => {
+    it("200: should be able to return a albums from spotify, that doesn`t exist in database", () => {
+      return request(app)
+        .get("/api/search?q=thriller&type=albums")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body).toHaveProperty("albums");
         });
     });
   });
