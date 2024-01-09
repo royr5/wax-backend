@@ -37,7 +37,8 @@
     "prepare": "husky install",
     "setup-db": "psql -f src/db/postgres/setup.sql",
     "seed-dev": "node dist/db/postgres/seed/run-seed.js",
-    "start-dev": "nodemon node ./dist/listen.js"
+    "start-dev": "nodemon node ./dist/listen.js",
+    "seed-users": "node dist/db/mongodb/seed/seed.js"
   },
   "keywords": [],
   "author": "",
