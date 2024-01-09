@@ -296,7 +296,7 @@ describe("/api/reviews", () => {
             expect(msg).toBe("not found");
         });
     });
-    test.only("400 responds with an appropriate status and error message when given an invalid id", () => {
+    test("400 responds with an appropriate status and error message when given an invalid id", () => {
         return (0, supertest_1.default)(app_1.default)
             .delete("/api/reviews/no-review")
             .expect(400)
@@ -312,6 +312,37 @@ describe("/api/search", () => {
                 .get("/api/search?q=take%20care&type=track")
                 .expect(200)
                 .then(({ body }) => {
+                expect(body).toHaveProperty("tracks");
+            });
+        });
+    });
+    describe("albums", () => {
+        it("200: should be able to return albums from spotify, that don't exist in database", () => {
+            return (0, supertest_1.default)(app_1.default)
+                .get("/api/search?q=thriller&type=album")
+                .expect(200)
+                .then(({ body }) => {
+                expect(body).toHaveProperty("albums");
+            });
+        });
+    });
+    describe("artists", () => {
+        it("200: should be able to return a artists from spotify, that dont exist in database", () => {
+            return (0, supertest_1.default)(app_1.default)
+                .get("/api/search?q=michael%20jackson&type=artist")
+                .expect(200)
+                .then(({ body }) => {
+                expect(body).toHaveProperty("artists");
+            });
+        });
+    });
+    describe("artists & albums & tracks", () => {
+        it("200: should be able to return albums, tracks and artists from spotify, that don't exist in database", () => {
+            return (0, supertest_1.default)(app_1.default)
+                .get("/api/search?q=drake&type=album,track,artist")
+                .expect(200)
+                .then(({ body }) => {
+                expect(body).toHaveProperty("artists");
                 expect(body).toHaveProperty("tracks");
             });
         });
