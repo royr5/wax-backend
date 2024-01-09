@@ -39,3 +39,8 @@ export interface Users {
   avatar_url: string,
   bio: string
 }
+
+export interface MongoUsers {
+  username: string,
+  password: string
+}
