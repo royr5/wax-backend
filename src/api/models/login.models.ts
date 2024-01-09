@@ -5,7 +5,7 @@ import crypto from "crypto";
 import QueryString from "qs";
 import * as dotenv from "dotenv";
 
-const redirect_uri = "http://localhost:3000/api/login/callback";
+const redirect_uri = "http://localhost:3000/api/spotify/login/callback";
 
 const ENV = process.env.NODE_ENV || "dev";
 
@@ -13,6 +13,7 @@ dotenv.config({ path: `${__dirname}/../../../.env.${ENV}` });
 
 const client_id = process.env.SPOTIFY_CLIENT_ID;
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
+// const refresh_token = process.env.SPOTIFY_REFRESH_TOKEN;
 
 export const userAuth = async (res: Response) => {
   const generateRandomString = (length: number) => {
@@ -70,7 +71,35 @@ export const requestToken = async (req: Request, res: Response) => {
     headers: authOptions.headers,
   });
 
-  //! dev use only
+  // ! dev use only
   console.log(Object.keys(tokenData));
   console.log(tokenData.data);
+};
+
+export const refreshAccessToken = async (req: Request) => {
+  const refresh_token = process.env.SPOTIFY_REFRESH_TOKEN;
+
+  const authOptions = {
+    url: "https://accounts.spotify.com/api/token",
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+      Authorization:
+        "Basic " +
+        Buffer.from(client_id + ":" + client_secret).toString("base64"),
+    },
+    form: {
+      grant_type: "refresh_token",
+      refresh_token: refresh_token,
+    },
+    json: true,
+  };
+
+  const tokenData = await axios({
+    method: "post",
+    url: authOptions.url,
+    data: authOptions.form,
+    headers: authOptions.headers,
+  });
+
+  return tokenData.data
 };

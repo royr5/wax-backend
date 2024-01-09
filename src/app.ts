@@ -10,6 +10,7 @@ import {
   handleServerErrors,
 } from "./errors";
 import serverless from "serverless-http";
+import searchRouter from "./api/routes/search.router";
 
 const app = express();
 
@@ -18,7 +19,10 @@ app.use(express.json());
 app.use("/api", apiRouter);
 app.use("/api/music", musicRouter);
 app.use("/api/reviews", reviewRouter);
-app.use("/api/login", loginRouter);
+
+app.use("/api/spotify", loginRouter);
+
+app.use("/api/search", searchRouter);
 
 app.all("*", handle404);
 
