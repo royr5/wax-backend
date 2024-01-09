@@ -41,7 +41,8 @@
     "seed-prod": "NODE_ENV=prod node dist/db/postgres/seed/run-seed.js",
     "seed-users": "node dist/db/mongodb/seed/seed.js",
     "start-dev": "nodemon node ./dist/listen.js",
-    "postbuild": "tsc && cp package.json dist/package.json && cd dist && npm install --omit=dev"
+    "postbuild": "tsc && cp package.json dist/package.json && cd dist && npm install --omit=dev",
+    "make-lambda": "tsc && cd /dist && zip -r -D lambda.zip *"
   },
   "keywords": [],
   "author": "",
