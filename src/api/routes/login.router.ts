@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { spotifyAccess, spotifyAuth } from "../controllers/login.controller";
+import { getAccessToken, spotifyAccess, spotifyAuth } from "../controllers/login.controller";
 
 const loginRouter = Router();
 
-loginRouter.route("/").get(spotifyAuth);
-loginRouter.route("/callback").get(spotifyAccess);
+loginRouter.route("/login").get(spotifyAuth);
+loginRouter.route("/login/callback").get(spotifyAccess);
+loginRouter.route("/refresh_token").get(getAccessToken)
 
 export default loginRouter;

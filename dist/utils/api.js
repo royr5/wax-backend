@@ -5,15 +5,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.searchSpotify = void 0;
 const axios_1 = __importDefault(require("axios"));
-const searchSpotify = async () => {
+const searchSpotify = async (token, q, type) => {
+    const types = type || "track,album,artist";
+    const reqString = `https://api.spotify.com/v1/search?q=${q}&type=${types}`;
+    // console.log("🚀 ~ searchSpotify ~ reqString:", reqString)
     try {
-        const data = await axios_1.default.get("https://api.spotify.com/v1/search?q=drake&type=album%2Cartist%2Ctrack", {
+        return await (0, axios_1.default)({
+            method: "get",
+            // url: "https://api.spotify.com/v1/search?q=take%2520care&type=track%2Calbum&market=GB",
+            url: reqString,
             headers: {
-                Authorization: "Bearer BQAnWotn0kMjTkAdlkJU_3nK9CPrRnSuofrd8Ezwa12Db-okRvXq58MIJ4hDLjLX0WTJH0-FWmYAPeb9jU2qcWaAb-oxf1O0cahf9qiY7oRoLBvbozrCbRxHjf1RgIVEqnpoWUlqslA3xeeCeK633o8CQPk-hH5jtkb4cj3ucBKa6ZSdourdVvNtKaxLjpdyuw",
+                Authorization: `Bearer ${token}`,
             },
         });
-        console.log(data);
     }
-    catch (err) { }
+    catch (err) {
+        // console.log("🚀 ~ searchSpotify ~ err:", err);
+    }
 };
 exports.searchSpotify = searchSpotify;

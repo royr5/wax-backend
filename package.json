@@ -32,7 +32,7 @@
   "version": "1.0.0",
   "main": "jest.config.js",
   "scripts": {
-    "test": "jest dist/__tests__",
+    "test": "clear; jest dist/__tests__",
     "test-watch": "jest dist/__tests__ --watch",
     "prepare": "husky install",
     "setup-db": "psql -f src/db/postgres/setup.sql",

@@ -1,35 +1,40 @@
 export interface Music {
-  music_id: string
-  artist_ids: string[]
-  artist_names: string[]
-  name: string
-  type: string
-  tracks: string[] | null
-  album_id: string
-  genres: string[] | null
-  preview: string
-  album_img: string
-  release_date: string
-  avg_rating?: number
+  music_id: string;
+  artist_ids: string[];
+  artist_names: string[];
+  name: string;
+  type: string;
+  tracks: string[] | null;
+  album_id: string;
+  genres: string[] | null;
+  preview: string;
+  album_img: string;
+  release_date: string;
+  avg_rating?: number;
 }
 export interface MusicQueries {
-  music_id?: string
-  artist_ids?: string
-  genres?: string
-  order?: 'ASC' | 'DESC'
-  p?: string
-  avg_rating?: "true" | "false"
+  music_id?: string;
+  artist_ids?: string;
+  genres?: string;
+  order?: "ASC" | "DESC";
+  p?: string;
+  avg_rating?: "true" | "false";
 }
 
 export interface CustomResponse extends Response {
-  [key: string]: unknown
+  [key: string]: unknown;
 }
 
 export interface Review {
-	music_id: number;
-	screen_name: number;
-	rating: number;
-	review_title: string | null;
-	review_body: string | null;
-	created_at?: string;
+  music_id: number;
+  screen_name: number;
+  rating: number;
+  review_title: string | null;
+  review_body: string | null;
+  created_at?: string;
+}
+
+export interface SpotifyQueries {
+  q: string;
+  type: string;
 }

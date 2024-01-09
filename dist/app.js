@@ -17,7 +17,7 @@ app.use(express_1.default.json());
 app.use("/api", api_router_1.default);
 app.use("/api/music", music_router_1.default);
 app.use("/api/reviews", review_router_1.default);
-app.use("/api/login", login_router_1.default);
+app.use("/api/spotify", login_router_1.default);
 app.use("/api/search", search_router_1.default);
 app.use(errors_1.handleCustomError);
 app.use(errors_1.handlePsql23502);
