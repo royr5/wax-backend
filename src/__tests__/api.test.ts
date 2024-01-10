@@ -4,9 +4,34 @@ import { Music, Review } from "../types/api";
 import db from ".././db/postgres/connection";
 import { users, music, reviews } from "../db/postgres/data/test-data.json";
 import { seed } from "../db/postgres/seed/seed";
+import client from "../db/mongodb/connection";
 
-afterAll(() => {
+afterAll(async () => {
   db.end();
+  await client.connect();
+  await client
+    .db("gatefold_users")
+    .collection("users")
+    .deleteMany({
+      username: { $in: ["ari", "franc", "roshan", "daif", "karo", "jordan"] },
+    });
+  client.close();
+});
+
+beforeAll(async () => {
+  await client.connect();
+  await client
+    .db("gatefold_users")
+    .collection("users")
+    .insertMany([
+      { username: "ari", password: "iSecretlyLoveCheese" },
+      { username: "franc", password: "pizza" },
+      { username: "roshan", password: "redlight" },
+      { username: "daif", password: "nchelp" },
+      { username: "karo", password: "shawarma" },
+      { username: "jordan", password: "radiusedEdge" },
+    ]);
+  client.close();
 });
 
 beforeEach(() => {
@@ -313,12 +338,35 @@ describe("/api/reviews", () => {
         expect(msg).toBe("not found");
       });
   });
-  test.only("400 responds with an appropriate status and error message when given an invalid id", () => {
+  test("400 responds with an appropriate status and error message when given an invalid id", () => {
     return request(app)
       .delete("/api/reviews/no-review")
       .expect(400)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("bad request");
       });
+  });
+});
+
+describe("/api/auth", () => {
+  describe("POST /api/auth", () => {
+    test("200: when sent a request with a valid username and password, returns true", () => {
+      return request(app)
+        .post("/api/auth")
+        .send({ username: "ari", password: "iSecretlyLoveCheese" })
+        .expect(200)
+        .then(({ body: { areValidCredentials } }) => {
+          expect(areValidCredentials).toBe(true);
+        });
+    });
+  });
+  test("401: when sent a request with an invalid username and/or password, returns true", () => {
+    return request(app)
+      .post("/api/auth")
+      .send({ username: "ari", password: "iSecretlyHateCheese" })
+      .expect(200)
+      .then(({ body: { areValidCredentials } }) => {
+        expect(areValidCredentials).toBe(false);
+      })
   });
 });
