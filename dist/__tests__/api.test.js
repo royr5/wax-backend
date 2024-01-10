@@ -20,7 +20,7 @@ afterAll(async () => {
         username: { $in: ["ari", "franc", "roshan", "daif", "karo", "jordan"] },
     });
     connection_2.default.close();
-});
+}, 60000);
 beforeAll(async () => {
     await connection_2.default.connect();
     await connection_2.default
@@ -37,8 +37,7 @@ beforeAll(async () => {
         { username: "karo", password: "shawarma" },
         { username: "jordan", password: "radiusedEdge" },
     ]);
-    connection_2.default.close();
-});
+}, 60000);
 beforeEach(() => {
     return (0, seed_1.seed)(test_data_json_1.users, test_data_json_1.music, test_data_json_1.reviews);
 });

@@ -35,7 +35,6 @@ beforeAll(async () => {
       { username: "karo", password: "shawarma" },
       { username: "jordan", password: "radiusedEdge" },
     ]);
-  client.close();
 }, 60000);
 
 beforeEach(() => {
