@@ -360,6 +360,22 @@ describe("/api/search", () => {
         });
     });
   });
+
+  describe("album", () => {
+    it("200: should be able to return a album from spotify, that doesn`t exist in database", () => {
+      return request(app)
+        .get("/api/search?q=take+care&type=album")
+        .expect(200)
+        .then(({ body }) => {
+          expect(
+            body.music.some((music: Music) =>
+              /((take).*(care))|((care).*(take))/gi.test(music.name)
+            )
+          ).toBe(true);
+        });
+    });
+  });
+
   describe("update database", () => {
     it("200: should update the database to include results from spotify", async () => {
       const spotifyResponse = await request(app)

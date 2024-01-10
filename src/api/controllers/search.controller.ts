@@ -32,7 +32,8 @@ export const getSearchedMusic = async (
         (music) => !storedMusicIds.includes(music.music_id)
       );
 
-      const insertedMusic = await insertMusic(musicDifference);
+        const insertedMusic = await insertMusic(musicDifference);
+
 
       const mergedMusic = Array.isArray(insertedMusic)
         ? [...musicOverlap, ...insertedMusic!]
