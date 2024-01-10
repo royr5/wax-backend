@@ -27,7 +27,10 @@ beforeAll(async () => {
         .db("gatefold_users")
         .collection("users")
         .insertMany([
-        { username: "ari", password: await bcryptjs_1.default.hash("iSecretlyLoveCheese", 10) },
+        {
+            username: "ari",
+            password: await bcryptjs_1.default.hash("iSecretlyLoveCheese", 10),
+        },
         { username: "franc", password: "pizza" },
         { username: "roshan", password: "redlight" },
         { username: "daif", password: "nchelp" },
@@ -158,6 +161,26 @@ describe("/api/music", () => {
                 .then(({ body }) => {
                 expect(body.music).toHaveProperty("avg_rating");
             });
+        });
+    });
+    describe("POST /api/music", () => {
+        it("201: should create a new music item in the database", async () => {
+            const { body } = await (0, supertest_1.default)(app_1.default)
+                .post("/api/music")
+                .send({
+                music_id: "test-music-id",
+                artist_ids: ["test-artist-id"],
+                artist_names: ["test-artist-names"],
+                name: "test-name",
+                type: "song",
+                tracks: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"],
+                release_date: "2023-08-05",
+            })
+                .expect(201);
+            const newMusic = await (0, supertest_1.default)(app_1.default)
+                .get(`/api/music?music_id=test-music-id`)
+                .expect(200);
+            expect(newMusic.body.music.music_id).toBe("test-music-id");
         });
     });
 });
@@ -330,29 +353,79 @@ describe("/api/reviews", () => {
         });
     });
 });
-describe("/api/auth", () => {
-    describe("POST /api/auth", () => {
-        test("200: when sent a request with a valid username and password, returns the correct object", () => {
+describe("/api/search", () => {
+    describe("track", () => {
+        it("200: should be able to return a track from spotify, that doesn`t exist in database", () => {
             return (0, supertest_1.default)(app_1.default)
-                .post("/api/auth")
-                .send({ username: "ari", password: "iSecretlyLoveCheese" })
+                .get("/api/search?q=take+care&type=track")
                 .expect(200)
-                .then(({ body: { areValidCredentials } }) => {
-                expect(areValidCredentials).toMatchObject({
-                    isValidUsername: true,
-                    isValidPassword: true,
-                });
+                .then(({ body }) => {
+                expect(body.music.some((music) => /((take).*(care))|((care).*(take))/gi.test(music.name))).toBe(true);
             });
         });
-        test("200: when sent a request with an valid username but invalid password, returns the correct object", () => {
+    });
+    describe("album", () => {
+        it("200: should be able to return a album from spotify, that doesn`t exist in database", () => {
             return (0, supertest_1.default)(app_1.default)
-                .post("/api/auth")
-                .send({ username: "ari", password: "iSecretlyHateCheese" })
+                .get("/api/search?q=take+care&type=album")
                 .expect(200)
-                .then(({ body: { areValidCredentials } }) => {
-                expect(areValidCredentials).toMatchObject({
-                    isValidUsername: true,
-                    isValidPassword: false,
+                .then(({ body }) => {
+                expect(body.music.some((music) => /((take).*(care))|((care).*(take))/gi.test(music.name))).toBe(true);
+            });
+        });
+    });
+    describe("update database", () => {
+        it("200: should update the database to include results from spotify", async () => {
+            const spotifyResponse = await (0, supertest_1.default)(app_1.default)
+                .get("/api/search?q=bohemian+rhapsody&type=track")
+                .expect(200);
+            const firstHit = spotifyResponse.body.music[0].music_id;
+            const databaseResponse = await (0, supertest_1.default)(app_1.default)
+                .get(`/api/music?music_id=${firstHit}`)
+                .expect(200);
+            const databaseTrack = databaseResponse.body.music;
+            expect(databaseTrack.music_id).toBe(firstHit);
+        });
+    });
+    describe("/api/auth", () => {
+        describe("POST /api/auth", () => {
+            test("200: when sent a request with a valid username and password, returns the correct object", () => {
+                return (0, supertest_1.default)(app_1.default)
+                    .post("/api/auth")
+                    .send({ username: "ari", password: "iSecretlyLoveCheese" })
+                    .expect(200)
+                    .then(({ body: { areValidCredentials } }) => {
+                    expect(areValidCredentials).toMatchObject({
+                        isValidUsername: true,
+                        isValidPassword: true,
+                    });
+                });
+            });
+            test("200: when sent a request with an valid username but invalid password, returns the correct object", () => {
+                return (0, supertest_1.default)(app_1.default)
+                    .post("/api/auth")
+                    .send({ username: "ari", password: "iSecretlyHateCheese" })
+                    .expect(200)
+                    .then(({ body: { areValidCredentials } }) => {
+                    expect(areValidCredentials).toMatchObject({
+                        isValidUsername: true,
+                        isValidPassword: false,
+                    });
+                });
+            });
+            test("200: when sent a request with an invalid username and password", () => {
+                return (0, supertest_1.default)(app_1.default)
+                    .post("/api/auth")
+                    .send({
+                    username: "music-hater",
+                    password: "doesn't even matter, the user doesn't exist",
+                })
+                    .expect(200)
+                    .then(({ body: { areValidCredentials } }) => {
+                    expect(areValidCredentials).toMatchObject({
+                        isValidUsername: false,
+                        isValidPassword: false,
+                    });
                 });
             });
         });

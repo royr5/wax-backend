@@ -12,13 +12,15 @@ const music_router_1 = __importDefault(require("./api/routes/music.router"));
 const auth_router_1 = __importDefault(require("./api/routes/auth.router"));
 const errors_1 = require("./errors");
 const serverless_http_1 = __importDefault(require("serverless-http"));
+const search_router_1 = __importDefault(require("./api/routes/search.router"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use("/api", api_router_1.default);
 app.use("/api/music", music_router_1.default);
 app.use("/api/reviews", review_router_1.default);
-app.use("/api/login", login_router_1.default); //spotify login
-app.use("/api/auth", auth_router_1.default); //user auth (omg we're so good at variable names)
+app.use("/api/spotify", login_router_1.default);
+app.use("/api/search", search_router_1.default);
+app.use("/api/auth", auth_router_1.default);
 app.all("*", errors_1.handle404);
 app.use(errors_1.handlePsqlErrors);
 app.use(errors_1.handleCustomError);

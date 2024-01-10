@@ -1,5 +1,5 @@
 import { NextFunction, Response, Request } from "express";
-import { selectAllMusic } from "../models/music.models";
+import { insertMusic, selectAllMusic } from "../models/music.models";
 
 export const getAllMusic = (
   req: Request,
@@ -13,4 +13,17 @@ export const getAllMusic = (
     .catch((err: Error) => {
       next(err);
     });
+};
+
+export const addMusic = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { body } = req;
+  try {
+    (await insertMusic(body)) && res.status(201).send({ msg: "created" });
+  } catch (err) {
+    next(err);
+  }
 };
