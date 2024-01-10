@@ -7,8 +7,6 @@ import { seed } from "../db/postgres/seed/seed";
 import client from "../db/mongodb/connection";
 import bcrypt from "bcryptjs";
 
-jest.setTimeout(30000)
-
 afterAll(async () => {
   db.end();
   await client.connect();
@@ -19,7 +17,7 @@ afterAll(async () => {
       username: { $in: ["ari", "franc", "roshan", "daif", "karo", "jordan"] },
     });
   client.close();
-});
+}, 60000);
 
 beforeAll(async () => {
   await client.connect();
@@ -38,7 +36,7 @@ beforeAll(async () => {
       { username: "jordan", password: "radiusedEdge" },
     ]);
   client.close();
-});
+}, 60000);
 
 beforeEach(() => {
   return seed(users as [], music as [], reviews as []);
