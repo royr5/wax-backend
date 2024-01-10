@@ -5,6 +5,7 @@ import db from ".././db/postgres/connection";
 import { users, music, reviews } from "../db/postgres/data/test-data.json";
 import { seed } from "../db/postgres/seed/seed";
 import client from "../db/mongodb/connection";
+import bcrypt from "bcryptjs";
 
 afterAll(async () => {
   db.end();
@@ -24,7 +25,7 @@ beforeAll(async () => {
     .db("gatefold_users")
     .collection("users")
     .insertMany([
-      { username: "ari", password: "iSecretlyLoveCheese" },
+      { username: "ari", password: await bcrypt.hash("iSecretlyLoveCheese", 10) },
       { username: "franc", password: "pizza" },
       { username: "roshan", password: "redlight" },
       { username: "daif", password: "nchelp" },
@@ -350,23 +351,30 @@ describe("/api/reviews", () => {
 
 describe("/api/auth", () => {
   describe("POST /api/auth", () => {
-    test("200: when sent a request with a valid username and password, returns true", () => {
+    test("200: when sent a request with a valid username and password, returns the correct object", () => {
       return request(app)
         .post("/api/auth")
         .send({ username: "ari", password: "iSecretlyLoveCheese" })
         .expect(200)
         .then(({ body: { areValidCredentials } }) => {
-          expect(areValidCredentials).toBe(true);
+          expect(areValidCredentials).toMatchObject({
+            isValidUsername: true,
+            isValidPassword: true,
+          });
         });
     });
-  });
-  test("401: when sent a request with an invalid username and/or password, returns true", () => {
-    return request(app)
-      .post("/api/auth")
-      .send({ username: "ari", password: "iSecretlyHateCheese" })
-      .expect(200)
-      .then(({ body: { areValidCredentials } }) => {
-        expect(areValidCredentials).toBe(false);
-      })
+
+    test("200: when sent a request with an valid username but invalid password, returns the correct object", () => {
+      return request(app)
+        .post("/api/auth")
+        .send({ username: "ari", password: "iSecretlyHateCheese" })
+        .expect(200)
+        .then(({ body: { areValidCredentials } }) => {
+          expect(areValidCredentials).toMatchObject({
+            isValidUsername: true,
+            isValidPassword: false,
+          });
+        });
+    });
   });
 });

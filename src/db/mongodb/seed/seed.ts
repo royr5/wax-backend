@@ -1,6 +1,8 @@
 import client from "../connection";
 import { MongoUsers } from "../../../types/api";
 import { users } from "../../postgres/data/test-data.json";
+const bcrypt = require("bcryptjs");
+
 
 async function addUsers() {
   try {
@@ -10,7 +12,9 @@ async function addUsers() {
     console.log(`Users removed- ${drop}`);
 
     const testMongoUsers = users.map((user) => {
-      return { username: user.username, password: "test" };
+      const salt = bcrypt.genSaltSync(10);
+      const password = bcrypt.hashSync(user.password, salt)
+      return { username: user.username, password, salt };
     });
 
     const result = await usersCol.insertMany(testMongoUsers);

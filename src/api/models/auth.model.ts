@@ -8,13 +8,11 @@ export const authenticateUser = async (username: string, password: string) => {
 
     const mCol = mDb.collection("users");
 
-    const areValidCredentials =
-      (await mCol.countDocuments({
-        username: username,
-        password: password,
-      })) === 1;
+    const dbCredentials: any = await mCol.findOne({
+      username: username,
+    });
     client.close();
-    return areValidCredentials;
+    return dbCredentials;
   } catch (err) {
     client.close();
     return err;
