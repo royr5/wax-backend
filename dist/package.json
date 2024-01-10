@@ -2,6 +2,7 @@
   "dependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
+    "@types/mongodb": "^4.0.7",
     "@types/pg": "^8.10.9",
     "@types/pg-format": "^1.0.5",
     "axios": "^1.6.3",
@@ -18,13 +19,15 @@
   "version": "1.0.0",
   "main": "jest.config.js",
   "scripts": {
-    "test": "jest dist/__tests__",
+    "test": "clear; jest dist/__tests__",
     "test-watch": "jest dist/__tests__ --watch",
     "setup-db": "psql -f src/db/postgres/setup.sql",
     "seed-dev": "node dist/db/postgres/seed/run-seed.js",
     "seed-prod": "NODE_ENV=prod node dist/db/postgres/seed/run-seed.js",
+    "seed-users": "node dist/db/mongodb/seed/seed.js",
     "start-dev": "nodemon node ./dist/listen.js",
-    "postbuild": "tsc && cp package.json dist/package.json && cd dist && npm install --omit=dev"
+    "postbuild": "tsc && cp package.json dist/package.json && cd dist && npm install --omit=dev",
+    "make-lambda": "tsc && cd /dist && zip -r -D lambda.zip *"
   },
   "keywords": [],
   "author": "",

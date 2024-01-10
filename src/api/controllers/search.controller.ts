@@ -10,7 +10,7 @@ export const getSearchedMusic = async (
   const { matchedMusic } = req.body;
   try {
     if (matchedMusic) {
-      const storedMusic = (await selectAllMusic()) as Music[];
+      const storedMusic = (await selectAllMusic(undefined, true)) as Music[];
 
       const storedMusicIds = storedMusic.map((music) => music.music_id);
 
@@ -24,13 +24,17 @@ export const getSearchedMusic = async (
         (music: Music) => !storedMusicIds.includes(music.music_id)
       );
 
-      const insertedMusic = await insertMusic(musicDifference);
+      if (!musicDifference.length) {
+        res.status(200).send({ music: musicOverlap });
+      } else {
+        const insertedMusic = await insertMusic(musicDifference);
 
-      const mergedMusic = Array.isArray(insertedMusic)
-        ? [...musicOverlap, ...insertedMusic!]
-        : [...musicOverlap, insertedMusic!];
+        const mergedMusic = Array.isArray(insertedMusic)
+          ? [...musicOverlap, ...insertedMusic!]
+          : [...musicOverlap, insertedMusic!];
 
-      res.status(200).send({ music: mergedMusic });
+        res.status(200).send({ music: mergedMusic });
+      }
     }
   } catch (err) {
     next(err);
