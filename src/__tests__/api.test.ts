@@ -330,8 +330,38 @@ describe("/api/search", () => {
       return request(app)
         .get("/api/search?q=take%20care&type=track")
         .expect(200)
-
         .then(({ body }) => {
+          expect(body).toHaveProperty("tracks");
+        });
+    });
+  });
+  describe("albums", () => {
+    it("200: should be able to return albums from spotify, that don't exist in database", () => {
+      return request(app)
+        .get("/api/search?q=thriller&type=album")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body).toHaveProperty("albums");
+        });
+    });
+  });
+  describe("artists", () => {
+    it("200: should be able to return a artists from spotify, that dont exist in database", () => {
+      return request(app)
+        .get("/api/search?q=michael%20jackson&type=artist")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body).toHaveProperty("artists");
+        });
+    });
+  });
+  describe("artists & albums & tracks", () => {
+    it("200: should be able to return albums, tracks and artists from spotify, that don't exist in database", () => {
+      return request(app)
+        .get("/api/search?q=drake&type=album,track,artist")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body).toHaveProperty("artists");
           expect(body).toHaveProperty("tracks");
         });
     });
