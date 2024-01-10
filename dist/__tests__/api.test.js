@@ -8,8 +8,32 @@ const app_1 = __importDefault(require("../app"));
 const connection_1 = __importDefault(require(".././db/postgres/connection"));
 const test_data_json_1 = require("../db/postgres/data/test-data.json");
 const seed_1 = require("../db/postgres/seed/seed");
-afterAll(() => {
+const connection_2 = __importDefault(require("../db/mongodb/connection"));
+afterAll(async () => {
     connection_1.default.end();
+    await connection_2.default.connect();
+    await connection_2.default
+        .db("gatefold_users")
+        .collection("users")
+        .deleteMany({
+        username: { $in: ["ari", "franc", "roshan", "daif", "karo", "jordan"] },
+    });
+    connection_2.default.close();
+});
+beforeAll(async () => {
+    await connection_2.default.connect();
+    await connection_2.default
+        .db("gatefold_users")
+        .collection("users")
+        .insertMany([
+        { username: "ari", password: "iSecretlyLoveCheese" },
+        { username: "franc", password: "pizza" },
+        { username: "roshan", password: "redlight" },
+        { username: "daif", password: "nchelp" },
+        { username: "karo", password: "shawarma" },
+        { username: "jordan", password: "radiusedEdge" },
+    ]);
+    connection_2.default.close();
 });
 beforeEach(() => {
     return (0, seed_1.seed)(test_data_json_1.users, test_data_json_1.music, test_data_json_1.reviews);
@@ -296,12 +320,34 @@ describe("/api/reviews", () => {
             expect(msg).toBe("not found");
         });
     });
-    test.only("400 responds with an appropriate status and error message when given an invalid id", () => {
+    test("400 responds with an appropriate status and error message when given an invalid id", () => {
         return (0, supertest_1.default)(app_1.default)
             .delete("/api/reviews/no-review")
             .expect(400)
             .then(({ body: { msg } }) => {
             expect(msg).toBe("bad request");
+        });
+    });
+});
+describe("/api/auth", () => {
+    describe("POST /api/auth", () => {
+        test("200: when sent a request with a valid username and password, returns true", () => {
+            return (0, supertest_1.default)(app_1.default)
+                .post("/api/auth")
+                .send({ username: "ari", password: "iSecretlyLoveCheese" })
+                .expect(200)
+                .then(({ body: { areValidCredentials } }) => {
+                expect(areValidCredentials).toBe(true);
+            });
+        });
+    });
+    test("401: when sent a request with an invalid username and/or password, returns true", () => {
+        return (0, supertest_1.default)(app_1.default)
+            .post("/api/auth")
+            .send({ username: "ari", password: "iSecretlyHateCheese" })
+            .expect(200)
+            .then(({ body: { areValidCredentials } }) => {
+            expect(areValidCredentials).toBe(false);
         });
     });
 });
