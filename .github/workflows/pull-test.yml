@@ -27,4 +27,6 @@ jobs:
         run: npm ci
 
       - name: Run tests
-        run: PGDATABASE=my_db PGUSER=test_user PGPASSWORD=test_password SPOTIFY_REFRESH_TOKEN=${{ secrets.SPOTIFY_REFRESH_TOKEN }} npm t
+        run: PGDATABASE=my_db PGUSER=test_user PGPASSWORD=test_password npm t
+        env:
+          SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
