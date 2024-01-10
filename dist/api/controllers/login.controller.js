@@ -23,7 +23,7 @@ const spotifyAccess = async (req, res, next) => {
 exports.spotifyAccess = spotifyAccess;
 const getAccessToken = async (req, _res, next) => {
     try {
-        await (0, login_models_1.refreshAccessToken)(req);
+        await (0, login_models_1.refreshAccessToken)();
     }
     catch (err) {
         next(err);
