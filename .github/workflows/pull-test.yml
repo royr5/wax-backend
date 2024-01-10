@@ -25,8 +25,8 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-        env:
-          SPOTIFY_REFRESH_TOKEN: ${{secrets.SPOTIFY_REFRESH_TOKEN}}
-          
+
       - name: Run tests
         run: PGDATABASE=my_db PGUSER=test_user PGPASSWORD=test_password npm t
+        env:
+          SPOTIFY_REFRESH_TOKEN: ${{secrets.SPOTIFY_REFRESH_TOKEN}}
