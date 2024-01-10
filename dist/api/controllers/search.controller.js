@@ -1,14 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getSearchedMusic = void 0;
-const api_1 = require("../../utils/api");
-const login_models_1 = require("../models/login.models");
 const music_models_1 = require("../models/music.models");
 const getSearchedMusic = async (req, res, next) => {
-    const { q, type } = req.query;
+    const { matchedMusic } = req.body;
     try {
-        const { access_token } = await (0, login_models_1.refreshAccessToken)();
-        const matchedMusic = (await (0, api_1.searchSpotify)(access_token, q, type));
         if (matchedMusic) {
             const storedMusic = (await (0, music_models_1.selectAllMusic)());
             const storedMusicIds = storedMusic.map((music) => music.music_id);

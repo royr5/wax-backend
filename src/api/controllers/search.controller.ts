@@ -1,6 +1,4 @@
 import { NextFunction, Response, Request } from "express";
-import { searchSpotify } from "../../utils/api";
-import { refreshAccessToken } from "../models/login.models";
 import { insertMusic, selectAllMusic } from "../models/music.models";
 import { Music } from "../../types/api";
 
@@ -9,31 +7,24 @@ export const getSearchedMusic = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { q, type } = req.query;
+  const { matchedMusic } = req.body;
   try {
-    const { access_token } = await refreshAccessToken();
-
-    const matchedMusic = (await searchSpotify(
-      access_token,
-      q as string,
-      type as string
-    )) as Music[];
-
     if (matchedMusic) {
       const storedMusic = (await selectAllMusic()) as Music[];
 
       const storedMusicIds = storedMusic.map((music) => music.music_id);
 
       const musicOverlap = storedMusic.filter((music) =>
-        matchedMusic.some((matched) => matched.music_id === music.music_id)
+        matchedMusic.some(
+          (matched: Music) => matched.music_id === music.music_id
+        )
       );
 
       const musicDifference = matchedMusic.filter(
-        (music) => !storedMusicIds.includes(music.music_id)
+        (music: Music) => !storedMusicIds.includes(music.music_id)
       );
 
-        const insertedMusic = await insertMusic(musicDifference);
-
+      const insertedMusic = await insertMusic(musicDifference);
 
       const mergedMusic = Array.isArray(insertedMusic)
         ? [...musicOverlap, ...insertedMusic!]

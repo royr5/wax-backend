@@ -345,50 +345,50 @@ describe("/api/reviews", () => {
   });
 });
 
-describe("/api/search", () => {
-  describe("track", () => {
-    it("200: should be able to return a track from spotify, that doesn`t exist in database", () => {
-      return request(app)
-        .get("/api/search?q=take+care&type=track")
-        .expect(200)
-        .then(({ body }) => {
-          expect(
-            body.music.some((music: Music) =>
-              /((take).*(care))|((care).*(take))/gi.test(music.name)
-            )
-          ).toBe(true);
-        });
-    });
-  });
+// describe("/api/search", () => {
+//   describe("track", () => {
+//     it("200: should be able to return a track from spotify, that doesn`t exist in database", () => {
+//       return request(app)
+//         .get("/api/search?q=take+care&type=track")
+//         .expect(200)
+//         .then(({ body }) => {
+//           expect(
+//             body.music.some((music: Music) =>
+//               /((take).*(care))|((care).*(take))/gi.test(music.name)
+//             )
+//           ).toBe(true);
+//         });
+//     });
+//   });
 
-  describe("album", () => {
-    it("200: should be able to return a album from spotify, that doesn`t exist in database", () => {
-      return request(app)
-        .get("/api/search?q=take+care&type=album")
-        .expect(200)
-        .then(({ body }) => {
-          expect(
-            body.music.some((music: Music) =>
-              /((take).*(care))|((care).*(take))/gi.test(music.name)
-            )
-          ).toBe(true);
-        });
-    });
-  });
+//   describe("album", () => {
+//     it("200: should be able to return a album from spotify, that doesn`t exist in database", () => {
+//       return request(app)
+//         .get("/api/search?q=take+care&type=album")
+//         .expect(200)
+//         .then(({ body }) => {
+//           expect(
+//             body.music.some((music: Music) =>
+//               /((take).*(care))|((care).*(take))/gi.test(music.name)
+//             )
+//           ).toBe(true);
+//         });
+//     });
+//   });
 
-  describe("update database", () => {
-    it("200: should update the database to include results from spotify", async () => {
-      const spotifyResponse = await request(app)
-        .get("/api/search?q=bohemian+rhapsody&type=track")
-        .expect(200);
-      const firstHit = spotifyResponse.body.music[0].music_id;
+//   describe("update database", () => {
+//     it("200: should update the database to include results from spotify", async () => {
+//       const spotifyResponse = await request(app)
+//         .get("/api/search?q=bohemian+rhapsody&type=track")
+//         .expect(200);
+//       const firstHit = spotifyResponse.body.music[0].music_id;
 
-      const databaseResponse = await request(app)
-        .get(`/api/music?music_id=${firstHit}`)
-        .expect(200);
-      const databaseTrack = databaseResponse.body.music;
+//       const databaseResponse = await request(app)
+//         .get(`/api/music?music_id=${firstHit}`)
+//         .expect(200);
+//       const databaseTrack = databaseResponse.body.music;
 
-      expect(databaseTrack.music_id).toBe(firstHit);
-    });
-  });
-});
+//       expect(databaseTrack.music_id).toBe(firstHit);
+//     });
+//   });
+// });
