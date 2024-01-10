@@ -25,7 +25,10 @@ beforeAll(async () => {
     .db("gatefold_users")
     .collection("users")
     .insertMany([
-      { username: "ari", password: await bcrypt.hash("iSecretlyLoveCheese", 10) },
+      {
+        username: "ari",
+        password: await bcrypt.hash("iSecretlyLoveCheese", 10),
+      },
       { username: "franc", password: "pizza" },
       { username: "roshan", password: "redlight" },
       { username: "daif", password: "nchelp" },
@@ -372,6 +375,21 @@ describe("/api/auth", () => {
         .then(({ body: { areValidCredentials } }) => {
           expect(areValidCredentials).toMatchObject({
             isValidUsername: true,
+            isValidPassword: false,
+          });
+        });
+    });
+    test("200: when sent a request with an invalid username and password", () => {
+      return request(app)
+        .post("/api/auth")
+        .send({
+          username: "music-hater",
+          password: "doesn't even matter, the user doesn't exist",
+        })
+        .expect(200)
+        .then(({ body: { areValidCredentials } }) => {
+          expect(areValidCredentials).toMatchObject({
+            isValidUsername: false,
             isValidPassword: false,
           });
         });
