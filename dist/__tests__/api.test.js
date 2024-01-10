@@ -9,6 +9,7 @@ const connection_1 = __importDefault(require(".././db/postgres/connection"));
 const test_data_json_1 = require("../db/postgres/data/test-data.json");
 const seed_1 = require("../db/postgres/seed/seed");
 const connection_2 = __importDefault(require("../db/mongodb/connection"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 afterAll(async () => {
     connection_1.default.end();
     await connection_2.default.connect();
@@ -26,7 +27,7 @@ beforeAll(async () => {
         .db("gatefold_users")
         .collection("users")
         .insertMany([
-        { username: "ari", password: "iSecretlyLoveCheese" },
+        { username: "ari", password: await bcryptjs_1.default.hash("iSecretlyLoveCheese", 10) },
         { username: "franc", password: "pizza" },
         { username: "roshan", password: "redlight" },
         { username: "daif", password: "nchelp" },
@@ -331,23 +332,29 @@ describe("/api/reviews", () => {
 });
 describe("/api/auth", () => {
     describe("POST /api/auth", () => {
-        test("200: when sent a request with a valid username and password, returns true", () => {
+        test("200: when sent a request with a valid username and password, returns the correct object", () => {
             return (0, supertest_1.default)(app_1.default)
                 .post("/api/auth")
                 .send({ username: "ari", password: "iSecretlyLoveCheese" })
                 .expect(200)
                 .then(({ body: { areValidCredentials } }) => {
-                expect(areValidCredentials).toBe(true);
+                expect(areValidCredentials).toMatchObject({
+                    isValidUsername: true,
+                    isValidPassword: true,
+                });
             });
         });
-    });
-    test("401: when sent a request with an invalid username and/or password, returns true", () => {
-        return (0, supertest_1.default)(app_1.default)
-            .post("/api/auth")
-            .send({ username: "ari", password: "iSecretlyHateCheese" })
-            .expect(200)
-            .then(({ body: { areValidCredentials } }) => {
-            expect(areValidCredentials).toBe(false);
+        test("200: when sent a request with an valid username but invalid password, returns the correct object", () => {
+            return (0, supertest_1.default)(app_1.default)
+                .post("/api/auth")
+                .send({ username: "ari", password: "iSecretlyHateCheese" })
+                .expect(200)
+                .then(({ body: { areValidCredentials } }) => {
+                expect(areValidCredentials).toMatchObject({
+                    isValidUsername: true,
+                    isValidPassword: false,
+                });
+            });
         });
     });
 });

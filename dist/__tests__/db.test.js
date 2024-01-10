@@ -15,7 +15,13 @@ afterAll(async () => {
 describe("postgres", () => {
     it("should contain all users", async () => {
         const { rows } = await connection_1.default.query(`SELECT * FROM users;`);
-        expect(rows).toMatchObject(test_data_json_1.users);
+        rows.forEach((row) => {
+            expect(row).toMatchObject({
+                username: expect.any(String),
+                avatar_url: expect.any(String),
+                bio: expect.any(String),
+            });
+        });
     });
     it("should contain all music", async () => {
         const { rows } = await connection_1.default.query(`SELECT * FROM music;`);

@@ -10,12 +10,11 @@ const authenticateUser = async (username, password) => {
         const mCl = await connection_1.default.connect();
         const mDb = mCl.db("gatefold_users");
         const mCol = mDb.collection("users");
-        const areValidCredentials = (await mCol.countDocuments({
+        const dbCredentials = await mCol.findOne({
             username: username,
-            password: password,
-        })) === 1;
+        });
         connection_1.default.close();
-        return areValidCredentials;
+        return dbCredentials;
     }
     catch (err) {
         connection_1.default.close();
