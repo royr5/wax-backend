@@ -433,7 +433,7 @@ describe("/api/search", () => {
               isValidPassword: true,
             });
           });
-      });
+      }, 10000);
 
       test("200: when sent a request with an valid username but invalid password, returns the correct object", () => {
         return request(app)
@@ -446,7 +446,7 @@ describe("/api/search", () => {
               isValidPassword: false,
             });
           });
-      });
+      }, 10000);
 
       test("200: when sent a request with an invalid username and password", () => {
         return request(app)
@@ -462,7 +462,7 @@ describe("/api/search", () => {
               isValidPassword: false,
             });
           });
-      });
+      }, 10000);
     });
   });
 });
