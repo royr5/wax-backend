@@ -28,7 +28,7 @@ export const seed = async (users: [], music: [], reviews: []) => {
         genres text ARRAY DEFAULT NULL,
         preview VARCHAR DEFAULT NULL,
         album_img VARCHAR DEFAULT NULL,
-        release_date DATE NOT NULL
+        release_date VARCHAR NOT NULL
         );`
 	);
 	await db.query(
