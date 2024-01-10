@@ -6,21 +6,35 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.searchSpotify = void 0;
 const axios_1 = __importDefault(require("axios"));
 const searchSpotify = async (token, q, type) => {
-    const types = type || "track,album,artist";
-    const reqString = `https://api.spotify.com/v1/search?q=${q}&type=${types}`;
-    // console.log("🚀 ~ searchSpotify ~ reqString:", reqString)
+    const reqString = `https://api.spotify.com/v1/search?q=${q}&type=${type}`;
     try {
-        return await (0, axios_1.default)({
+        const matchedMusic = await (0, axios_1.default)({
             method: "get",
-            // url: "https://api.spotify.com/v1/search?q=take%2520care&type=track%2Calbum&market=GB",
             url: reqString,
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         });
+        const spotifyItems = matchedMusic.data[`${type}s`].items;
+        const formattedSpotify = spotifyItems.map((item) => {
+            return (item.type === "track" && {
+                music_id: item.id,
+                artist_ids: item.artists.map((artist) => artist.id),
+                artist_names: item.artists.map((artist) => artist.name),
+                name: item.name,
+                type: item.type,
+                tracks: null,
+                album_id: item.album.id,
+                genres: null,
+                preview: item.preview_url,
+                album_img: item.album.images[0].url,
+                release_date: item.album.release_date,
+            });
+        });
+        return formattedSpotify;
     }
     catch (err) {
-        // console.log("🚀 ~ searchSpotify ~ err:", err);
+        throw err;
     }
 };
 exports.searchSpotify = searchSpotify;

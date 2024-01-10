@@ -72,11 +72,11 @@ export const requestToken = async (req: Request, res: Response) => {
   });
 
   // ! dev use only
-  console.log(Object.keys(tokenData));
-  console.log(tokenData.data);
+  // console.log(Object.keys(tokenData));
+  // console.log(tokenData.data);
 };
 
-export const refreshAccessToken = async (req: Request) => {
+export const refreshAccessToken = async () => {
   const refresh_token = process.env.SPOTIFY_REFRESH_TOKEN;
 
   const authOptions = {
@@ -101,5 +101,5 @@ export const refreshAccessToken = async (req: Request) => {
     headers: authOptions.headers,
   });
 
-  return tokenData.data
+  return tokenData.data;
 };

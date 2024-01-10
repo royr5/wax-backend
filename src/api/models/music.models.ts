@@ -70,3 +70,48 @@ export const selectAllMusic = (
     return rows;
   });
 };
+
+export const insertMusic = async (music: Music | Music[]) => {
+  const formattedMusic = Array.isArray(music)
+    ? music.map((item) => [
+        item.music_id,
+        `{${item.artist_ids.map((artist_id) => `'${artist_id}'`)}}`,
+        `{${item.artist_names.map((artist_name) => `${artist_name}`)}}`,
+        item.name,
+        item.type,
+        item.tracks && `{${item.tracks.map((track) => `${track}`)}}`,
+        item.album_id,
+        item.preview,
+        item.album_img,
+        item.release_date,
+      ])
+    : [
+        [
+          music.music_id,
+          `{${music.artist_ids.map((artist_id) => `'${artist_id}'`)}}`,
+          `{${music.artist_names.map((artist_name) => `${artist_name}`)}}`,
+          music.name,
+          music.type,
+          music.tracks && `{${music.tracks.map((track) => `${track}`)}}`,
+          music.album_id,
+          music.preview,
+          music.album_img,
+        music.release_date
+      
+      ],
+      ];
+      
+  const formattedMusicQuery = format(
+    `INSERT INTO music
+    (music_id, artist_ids, artist_names, name, type, tracks, album_id, preview, album_img, release_date)
+    VALUES
+    %L
+    RETURNING *
+    ;`,
+    formattedMusic
+  );
+
+  const { rows } = await db.query(formattedMusicQuery);
+
+  return rows as Music | Music[];
+};

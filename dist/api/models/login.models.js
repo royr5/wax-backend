@@ -86,11 +86,11 @@ const requestToken = async (req, res) => {
         headers: authOptions.headers,
     });
     // ! dev use only
-    console.log(Object.keys(tokenData));
-    console.log(tokenData.data);
+    // console.log(Object.keys(tokenData));
+    // console.log(tokenData.data);
 };
 exports.requestToken = requestToken;
-const refreshAccessToken = async (req) => {
+const refreshAccessToken = async () => {
     const refresh_token = process.env.SPOTIFY_REFRESH_TOKEN;
     const authOptions = {
         url: "https://accounts.spotify.com/api/token",

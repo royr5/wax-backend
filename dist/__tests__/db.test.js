@@ -27,7 +27,7 @@ describe("postgres", () => {
                 name: expect.any(String),
                 type: expect.any(String),
                 album_id: expect.any(String),
-                release_date: expect.any(Date),
+                release_date: expect.any(String),
             });
             row.genres !== null &&
                 row.genres.forEach((genre) => {

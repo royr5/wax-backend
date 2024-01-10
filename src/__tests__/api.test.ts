@@ -4,7 +4,6 @@ import { Music, Review } from "../types/api";
 import db from ".././db/postgres/connection";
 import { users, music, reviews } from "../db/postgres/data/test-data.json";
 import { seed } from "../db/postgres/seed/seed";
-import { Response } from "express";
 
 afterAll(() => {
   db.end();
@@ -135,6 +134,28 @@ describe("/api/music", () => {
         .then(({ body }) => {
           expect(body.music).toHaveProperty("avg_rating");
         });
+    });
+  });
+  describe("POST /api/music", () => {
+    it("201: should create a new music item in the database", async () => {
+      const { body } = await request(app)
+        .post("/api/music")
+        .send({
+          music_id: "test-music-id",
+          artist_ids: ["test-artist-id"],
+          artist_names: ["test-artist-names"],
+          name: "test-name",
+          type: "song",
+          tracks: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"],
+          release_date: "2023-08-05",
+        })
+        .expect(201);
+
+      const newMusic = await request(app)
+        .get(`/api/music?music_id=test-music-id`)
+        .expect(200);
+
+      expect(newMusic.body.music.music_id).toBe("test-music-id");
     });
   });
 });
@@ -314,7 +335,7 @@ describe("/api/reviews", () => {
         expect(msg).toBe("not found");
       });
   });
-  test.only("400 responds with an appropriate status and error message when given an invalid id", () => {
+  test("400 responds with an appropriate status and error message when given an invalid id", () => {
     return request(app)
       .delete("/api/reviews/no-review")
       .expect(400)
@@ -328,12 +349,30 @@ describe("/api/search", () => {
   describe("track", () => {
     it("200: should be able to return a track from spotify, that doesn`t exist in database", () => {
       return request(app)
-        .get("/api/search?q=take%20care&type=track")
+        .get("/api/search?q=take+care&type=track")
         .expect(200)
-
         .then(({ body }) => {
-          expect(body).toHaveProperty("tracks");
+          expect(
+            body.music.some((music: Music) =>
+              /((take).*(care))|((care).*(take))/gi.test(music.name)
+            )
+          ).toBe(true);
         });
+    });
+  });
+  describe("update database", () => {
+    it("200: should update the database to include results from spotify", async () => {
+      const spotifyResponse = await request(app)
+        .get("/api/search?q=bohemian+rhapsody&type=track")
+        .expect(200);
+      const firstHit = spotifyResponse.body.music[0].music_id;
+
+      const databaseResponse = await request(app)
+        .get(`/api/music?music_id=${firstHit}`)
+        .expect(200);
+      const databaseTrack = databaseResponse.body.music;
+
+      expect(databaseTrack.music_id).toBe(firstHit);
     });
   });
 });
