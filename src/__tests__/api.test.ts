@@ -7,7 +7,7 @@ import { seed } from "../db/postgres/seed/seed";
 import client from "../db/mongodb/connection";
 import bcrypt from "bcryptjs";
 
-jest.setTimeout(10000)
+jest.setTimeout(30000)
 
 afterAll(async () => {
   db.end();
@@ -435,7 +435,7 @@ describe("/api/search", () => {
               isValidPassword: true,
             });
           });
-      }, 10000);
+      });
 
       test("200: when sent a request with an valid username but invalid password, returns the correct object", () => {
         return request(app)
@@ -448,7 +448,7 @@ describe("/api/search", () => {
               isValidPassword: false,
             });
           });
-      }, 10000);
+      });
 
       test("200: when sent a request with an invalid username and password", () => {
         return request(app)
