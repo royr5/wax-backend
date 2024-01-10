@@ -14,18 +14,27 @@ export const checkUserCredentials = async (
 
     const dbCredentials = await authenticateUser(username, passwordAttempt);
 
-    const isValidUsername = "username" in dbCredentials;
-    const isValidPassword = bcrypt.compareSync(
-      passwordAttempt,
-      dbCredentials.password
-    );
+    if (!dbCredentials) {
+      res.status(200).send({
+        areValidCredentials: {
+          isValidUsername: false,
+          isValidPassword: false,
+        },
+      });
+    } else {
+      const isValidUsername = "username" in dbCredentials;
+      const isValidPassword = await bcrypt.compare(
+        passwordAttempt,
+        dbCredentials.password
+      );
 
-    res.status(200).send({
-      areValidCredentials: {
-        isValidUsername,
-        isValidPassword,
-      },
-    });
+      res.status(200).send({
+        areValidCredentials: {
+          isValidUsername,
+          isValidPassword,
+        },
+      });
+    }
   } catch (err) {
     next(err);
   }
