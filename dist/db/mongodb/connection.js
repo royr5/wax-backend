@@ -25,7 +25,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongodb_1 = require("mongodb");
 const dotenv = __importStar(require("dotenv"));
-dotenv.config();
+dotenv.config({ path: `${__dirname}/../../../.env` });
 const uri = `mongodb+srv://${process.env.MONGO_CREDENTIALS}@gatefold.mfug5v2.mongodb.net/?appName=mongosh+2.1.1`;
 const client = new mongodb_1.MongoClient(uri);
 exports.default = client;

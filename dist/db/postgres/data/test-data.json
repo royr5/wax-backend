@@ -3,102 +3,122 @@
         {
             "username": "jessica_lee",
             "avatar_url": "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
-            "bio": "Avid reader, coffee lover, and aspiring writer"
+            "bio": "Avid reader, coffee lover, and aspiring writer",
+            "password": "test"
         },
         {
             "username": "david_smith",
             "avatar_url": "https://images.unsplash.com/photo-1544005313-94ddf0286df2",
-            "bio": "Software engineer, gamer, and podcast enthusiast"
+            "bio": "Software engineer, gamer, and podcast enthusiast",
+            "password": "test"
         },
         {
             "username": "lisa_jones",
             "avatar_url": "https://images.unsplash.com/photo-1521119989659-a83eee488004",
-            "bio": "Travel blogger, photographer, and digital nomad"
+            "bio": "Travel blogger, photographer, and digital nomad",
+            "password": "test"
         },
         {
             "username": "mike_brown",
             "avatar_url": "https://images.unsplash.com/photo-1545167622-3a6ac756afa4",
-            "bio": "Fitness coach, nutritionist, and marathon runner"
+            "bio": "Fitness coach, nutritionist, and marathon runner",
+            "password": "test"
         },
         {
             "username": "sarah_wilson",
             "avatar_url": "https://images.unsplash.com/photo-1546456073-92b9f0a8d413",
-            "bio": "Fashion designer, stylist, and influencer"
+            "bio": "Fashion designer, stylist, and influencer",
+            "password": "test"
         },
         {
             "username": "john_doe",
             "avatar_url": "https://images.unsplash.com/photo-1542103749-8ef59b94f47e",
-            "bio": "Mystery man, secret agent, and master of disguise"
+            "bio": "Mystery man, secret agent, and master of disguise",
+            "password": "test"
         },
         {
             "username": "emma_green",
             "avatar_url": "https://images.unsplash.com/photo-1516724562728-afc824a36e84",
-            "bio": "Artist, musician, and creative soul"
+            "bio": "Artist, musician, and creative soul",
+            "password": "test"
         },
         {
             "username": "sam_cook",
             "avatar_url": "https://images.unsplash.com/photo-1546452995-db1f9e86fc64",
-            "bio": "Chef, food critic, and cookbook author"
+            "bio": "Chef, food critic, and cookbook author",
+            "password": "test"
         },
         {
             "username": "anna_smith",
             "avatar_url": "https://images.unsplash.com/photo-1528892952291-009c663ce843",
-            "bio": "Teacher, mother, and lifelong learner"
+            "bio": "Teacher, mother, and lifelong learner",
+            "password": "test"
         },
         {
             "username": "jack_jones",
             "avatar_url": "https://images.unsplash.com/photo-1541178735493-479c1a27ed24",
-            "bio": "Sports fan, football player, and coach"
+            "bio": "Sports fan, football player, and coach",
+            "password": "test"
         },
         {
             "username": "stardust_dreamer",
             "avatar_url": "https://images.unsplash.com/photo-1565460875465-4a254395754a",
-            "bio": "Wanderer of galaxies, collector of stardust, and dreamer of dreams"
+            "bio": "Wanderer of galaxies, collector of stardust, and dreamer of dreams",
+            "password": "test"
         },
         {
             "username": "ink_stained_poet",
             "avatar_url": "https://images.unsplash.com/photo-1463585654750-4a554a454a75",
-            "bio": "Weaving words into worlds, painting emotions with ink, and dancing with metaphors"
+            "bio": "Weaving words into worlds, painting emotions with ink, and dancing with metaphors",
+            "password": "test"
         },
         {
             "username": "time_traveling_historian",
             "avatar_url": "https://images.unsplash.com/photo-1585405468546-543f50543544",
-            "bio": "Seeking stories in the past, unraveling mysteries of time, and whispering secrets of forgotten eras"
+            "bio": "Seeking stories in the past, unraveling mysteries of time, and whispering secrets of forgotten eras",
+            "password": "test"
         },
         {
             "username": "pixel_magician",
             "avatar_url": "https://images.unsplash.com/photo-1546354655465-4a554a454a75",
-            "bio": "Bending reality with code, conjuring dreams from pixels, and painting digital masterpieces"
+            "bio": "Bending reality with code, conjuring dreams from pixels, and painting digital masterpieces",
+            "password": "test"
         },
         {
             "username": "book_whisperer",
             "avatar_url": "https://images.unsplash.com/photo-1465465454654-4a554a454a75",
-            "bio": "Lost in the pages of stories, befriending fictional characters, and breathing life into words"
+            "bio": "Lost in the pages of stories, befriending fictional characters, and breathing life into words",
+            "password": "test"
         },
         {
             "username": "night_owl_philosopher",
             "avatar_url": "https://images.unsplash.com/photo-1554654654646-4a554a454a75",
-            "bio": "Contemplating the cosmos under starlight, pondering the mysteries of existence, and seeking wisdom in the shadows"
+            "bio": "Contemplating the cosmos under starlight, pondering the mysteries of existence, and seeking wisdom in the shadows",
+            "password": "test"
         },
         {
             "username": "natures_muse",
             "avatar_url": "https://images.unsplash.com/photo-1554654654646-4a554a454a75",
-            "bio": "Finding beauty in the wild, whispering with the wind, and dancing with the trees"
+            "bio": "Finding beauty in the wild, whispering with the wind, and dancing with the trees",
+            "password": "test"
         },
         {
             "username": "mad_scientist_baker",
             "avatar_url": "https://images.unsplash.com/photo-1465465454654-4a554a454a75",
-            "bio": "Experimenting with flavors, creating edible masterpieces, and unleashing culinary chaos"
+            "bio": "Experimenting with flavors, creating edible masterpieces, and unleashing culinary chaos",
+            "password": "test"
         },
         {
             "username": "thread_weaver",
             "avatar_url": "https://images.unsplash.com/photo-1565465446456-4a554a454a75",
-            "bio": "Knitting stories with yarn, stitching dreams into reality, and creating warmth with every stitch"
+            "bio": "Knitting stories with yarn, stitching dreams into reality, and creating warmth with every stitch",
+            "password": "test"
         },
         {
             "username": "music_soul",
             "avatar_url": "https://images.unsplash.com/photo-1465465454654-4a554a454a75",
-            "bio": "Living through melodies, breathing in harmony, and resonating with the rhythm of life"
+            "bio": "Living through melodies, breathing in harmony, and resonating with the rhythm of life",
+            "password": "test"
         }
     ],
     "reviews": [

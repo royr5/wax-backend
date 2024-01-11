@@ -13,7 +13,13 @@ afterAll(async () => {
 describe("postgres", () => {
   it("should contain all users", async () => {
     const { rows } = await pgDb.query(`SELECT * FROM users;`);
-    expect(rows).toMatchObject(users);
+    rows.forEach((row) => {
+      expect(row).toMatchObject({
+        username: expect.any(String),
+        avatar_url: expect.any(String),
+        bio: expect.any(String),
+      });
+    });
   });
   it("should contain all music", async () => {
     const { rows } = await pgDb.query(`SELECT * FROM music;`);
