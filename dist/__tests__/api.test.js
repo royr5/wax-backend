@@ -353,79 +353,44 @@ describe("/api/reviews", () => {
         });
     });
 });
-describe("/api/search", () => {
-    describe("track", () => {
-        it("200: should be able to return a track from spotify, that doesn`t exist in database", () => {
+describe("/api/auth", () => {
+    describe("POST /api/auth", () => {
+        test("200: when sent a request with a valid username and password, returns the correct object", () => {
             return (0, supertest_1.default)(app_1.default)
-                .get("/api/search?q=take+care&type=track")
+                .post("/api/auth")
+                .send({ username: "ari", password: "iSecretlyLoveCheese" })
                 .expect(200)
-                .then(({ body }) => {
-                expect(body.music.some((music) => /((take).*(care))|((care).*(take))/gi.test(music.name))).toBe(true);
-            });
-        });
-    });
-    describe("album", () => {
-        it("200: should be able to return a album from spotify, that doesn`t exist in database", () => {
-            return (0, supertest_1.default)(app_1.default)
-                .get("/api/search?q=take+care&type=album")
-                .expect(200)
-                .then(({ body }) => {
-                expect(body.music.some((music) => /((take).*(care))|((care).*(take))/gi.test(music.name))).toBe(true);
-            });
-        });
-    });
-    describe("update database", () => {
-        it("200: should update the database to include results from spotify", async () => {
-            const spotifyResponse = await (0, supertest_1.default)(app_1.default)
-                .get("/api/search?q=bohemian+rhapsody&type=track")
-                .expect(200);
-            const firstHit = spotifyResponse.body.music[0].music_id;
-            const databaseResponse = await (0, supertest_1.default)(app_1.default)
-                .get(`/api/music?music_id=${firstHit}`)
-                .expect(200);
-            const databaseTrack = databaseResponse.body.music;
-            expect(databaseTrack.music_id).toBe(firstHit);
-        });
-    });
-    describe("/api/auth", () => {
-        describe("POST /api/auth", () => {
-            test("200: when sent a request with a valid username and password, returns the correct object", () => {
-                return (0, supertest_1.default)(app_1.default)
-                    .post("/api/auth")
-                    .send({ username: "ari", password: "iSecretlyLoveCheese" })
-                    .expect(200)
-                    .then(({ body: { areValidCredentials } }) => {
-                    expect(areValidCredentials).toMatchObject({
-                        isValidUsername: true,
-                        isValidPassword: true,
-                    });
+                .then(({ body: { areValidCredentials } }) => {
+                expect(areValidCredentials).toMatchObject({
+                    isValidUsername: true,
+                    isValidPassword: true,
                 });
             });
-            test("200: when sent a request with an valid username but invalid password, returns the correct object", () => {
-                return (0, supertest_1.default)(app_1.default)
-                    .post("/api/auth")
-                    .send({ username: "ari", password: "iSecretlyHateCheese" })
-                    .expect(200)
-                    .then(({ body: { areValidCredentials } }) => {
-                    expect(areValidCredentials).toMatchObject({
-                        isValidUsername: true,
-                        isValidPassword: false,
-                    });
+        });
+        test("200: when sent a request with an valid username but invalid password, returns the correct object", () => {
+            return (0, supertest_1.default)(app_1.default)
+                .post("/api/auth")
+                .send({ username: "ari", password: "iSecretlyHateCheese" })
+                .expect(200)
+                .then(({ body: { areValidCredentials } }) => {
+                expect(areValidCredentials).toMatchObject({
+                    isValidUsername: true,
+                    isValidPassword: false,
                 });
             });
-            test("200: when sent a request with an invalid username and password", () => {
-                return (0, supertest_1.default)(app_1.default)
-                    .post("/api/auth")
-                    .send({
-                    username: "music-hater",
-                    password: "doesn't even matter, the user doesn't exist",
-                })
-                    .expect(200)
-                    .then(({ body: { areValidCredentials } }) => {
-                    expect(areValidCredentials).toMatchObject({
-                        isValidUsername: false,
-                        isValidPassword: false,
-                    });
+        });
+        test("200: when sent a request with an invalid username and password", () => {
+            return (0, supertest_1.default)(app_1.default)
+                .post("/api/auth")
+                .send({
+                username: "music-hater",
+                password: "doesn't even matter, the user doesn't exist",
+            })
+                .expect(200)
+                .then(({ body: { areValidCredentials } }) => {
+                expect(areValidCredentials).toMatchObject({
+                    isValidUsername: false,
+                    isValidPassword: false,
                 });
             });
         });

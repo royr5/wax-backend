@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.insertMusic = exports.selectAllMusic = void 0;
 const connection_1 = __importDefault(require("../../db/postgres/connection"));
 const pg_format_1 = __importDefault(require("pg-format"));
-const selectAllMusic = (queries) => {
+const selectAllMusic = (queries, all) => {
     const whereMusic_id = queries?.music_id
         ? `WHERE music.music_id = '${queries?.music_id}'`
         : ``;
@@ -19,8 +19,11 @@ const selectAllMusic = (queries) => {
     const orderBy = queries?.order
         ? `release_date ${queries?.order}`
         : `release_date DESC`;
-    const pagination = queries?.p
+    const pagination = queries?.p && !all
         ? `OFFSET ${parseInt(queries?.p) * 30 - 30}`
+        : ``;
+    const limit = !all
+        ? `LIMIT  30`
         : ``;
     const aggAvgRating = queries?.avg_rating === "true"
         ? `,  ROUND(AVG(reviews.rating),1) AS avg_rating `
@@ -36,9 +39,9 @@ const selectAllMusic = (queries) => {
     %s
     %s
     ORDER BY %s
-    LIMIT 30
     %s
-    ;`, aggAvgRating, joinAvgRating, whereMusic_id, whereArtist_ids, whereGenres, groupAvgRating, orderBy, pagination);
+    %s
+    ;`, aggAvgRating, joinAvgRating, whereMusic_id, whereArtist_ids, whereGenres, groupAvgRating, orderBy, limit, pagination);
     return connection_1.default.query(formattedMusicQuery).then(({ rows }) => {
         if (!rows.length) {
             return Promise.reject({ status: 404, msg: "not found" });
@@ -50,6 +53,12 @@ const selectAllMusic = (queries) => {
     });
 };
 exports.selectAllMusic = selectAllMusic;
+const handleDate = (date) => {
+    if (date.length > 4)
+        return date;
+    if (date.length === 4)
+        return `${date}-01-01`;
+};
 const insertMusic = async (music) => {
     const formattedMusic = Array.isArray(music)
         ? music.map((item) => [
@@ -62,7 +71,7 @@ const insertMusic = async (music) => {
             item.album_id,
             item.preview,
             item.album_img,
-            item.release_date,
+            handleDate(item.release_date),
         ])
         : [
             [
@@ -75,7 +84,7 @@ const insertMusic = async (music) => {
                 music.album_id,
                 music.preview,
                 music.album_img,
-                music.release_date
+                handleDate(music.release_date),
             ],
         ];
     const formattedMusicQuery = (0, pg_format_1.default)(`INSERT INTO music

@@ -3,7 +3,7 @@ import format from "pg-format";
 import { Music, MusicQueries } from "../../types/api";
 
 export const selectAllMusic = (
-  queries?: MusicQueries
+  queries?: MusicQueries, all?: boolean
 ): Promise<Music | Music[]> => {
   const whereMusic_id = queries?.music_id
     ? `WHERE music.music_id = '${queries?.music_id}'`
@@ -23,8 +23,12 @@ export const selectAllMusic = (
     ? `release_date ${queries?.order}`
     : `release_date DESC`;
 
-  const pagination = queries?.p
+  const pagination = queries?.p && !all
     ? `OFFSET ${parseInt(queries?.p) * 30 - 30}`
+    : ``;
+
+  const limit = !all
+    ? `LIMIT  30`
     : ``;
 
   const aggAvgRating =
@@ -48,7 +52,7 @@ export const selectAllMusic = (
     %s
     %s
     ORDER BY %s
-    LIMIT 30
+    %s
     %s
     ;`,
     aggAvgRating,
@@ -58,6 +62,7 @@ export const selectAllMusic = (
     whereGenres,
     groupAvgRating,
     orderBy,
+    limit,
     pagination
   );
 
@@ -69,6 +74,11 @@ export const selectAllMusic = (
     }
     return rows;
   });
+};
+
+const handleDate = (date: string) => {
+  if (date.length > 4) return date;
+  if (date.length === 4) return `${date}-01-01`;
 };
 
 export const insertMusic = async (music: Music | Music[]) => {
@@ -83,7 +93,7 @@ export const insertMusic = async (music: Music | Music[]) => {
         item.album_id,
         item.preview,
         item.album_img,
-        item.release_date,
+        handleDate(item.release_date),
       ])
     : [
         [
@@ -96,11 +106,10 @@ export const insertMusic = async (music: Music | Music[]) => {
           music.album_id,
           music.preview,
           music.album_img,
-        music.release_date
-      
-      ],
+          handleDate(music.release_date),
+        ],
       ];
-      
+
   const formattedMusicQuery = format(
     `INSERT INTO music
     (music_id, artist_ids, artist_names, name, type, tracks, album_id, preview, album_img, release_date)
