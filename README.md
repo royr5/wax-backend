@@ -9,13 +9,13 @@ This repository builds a RESTful API and databases, to allow the WAX music revie
 Clone the project
 
 ```bash
-  git clone https://github.com/royr5/gatefold-api.git
+  git clone https://github.com/royr5/wax-backend.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd gatefold-api
+  cd wax-backend
 ```
 
 Install dependencies
@@ -77,7 +77,7 @@ npm run test
 
 ## Frontend Repository
 
-The frontend code for this project can be found in the [gatefold-frontend repository](https://github.com/royr5/gatefold-frontend).
+The frontend code for this project can be found in the [wax-frontend repository](https://github.com/royr5/wax-frontend).
 
 ## Authors
 
